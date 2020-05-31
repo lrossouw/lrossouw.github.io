@@ -1,0 +1,625 @@
+---
+layout: post
+---
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Modelling COVID-19 in South Africa at a Provinical Level</title>
+
+<script src="modelling_covid-19_in_south_africa_at_a_provinical_level_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="modelling_covid-19_in_south_africa_at_a_provinical_level_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="modelling_covid-19_in_south_africa_at_a_provinical_level_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="modelling_covid-19_in_south_africa_at_a_provinical_level_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="modelling_covid-19_in_south_africa_at_a_provinical_level_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="modelling_covid-19_in_south_africa_at_a_provinical_level_files/navigation-1.1/tabsets.js"></script>
+<link href="modelling_covid-19_in_south_africa_at_a_provinical_level_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="modelling_covid-19_in_south_africa_at_a_provinical_level_files/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Modelling COVID-19 in South Africa at a Provinical Level</h1>
+
+</div>
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>In this report we model the COVID-19 epidemic in South Africa. In this paper mobility data is used to model the reproduction number of the COVID-19 epidemic over time using Bayesian hierarchical model. Results are calibrated to reported deaths only. This is achieved by adapting the work in <span class="citation">[1]</span> for South Africa. Similar models have been built for Brazil <span class="citation">[2]</span> and the United States <span class="citation">[3]</span>.</p>
+<p>We use data as compiled in <span class="citation">[4]</span>. We use mobility movement indexes by province from <span class="citation">[5]</span>. This report is automatically generated using R <span class="citation">[6]</span> and contains data available on 29 May 2020.</p>
+</div>
+<div id="methodology" class="section level1">
+<h1>Methodology</h1>
+<p>Key features of the approach employed are:</p>
+<ul>
+<li>It uses a Bayesian Hierarchical Model to calibrate model parameters based on observed death data and prior assumptions.</li>
+<li>Changes in the reproductive number are linked to mobility data <span class="citation">[5]</span>.</li>
+<li>The model uses population weighted infection fatality ratio (IFRs) with some noise added.</li>
+<li>There is a single model for all provinces sharing information between provinces, but province specific effects are also allowed.</li>
+<li>The model does not allow for interventions that are not observable via mobility changes. This includes testing and contact tracing, mask wearing, workplace screening etc.</li>
+</ul>
+<p>See a more detailed description of the <a href="#detailed-assumptions-and-Methodology">methodology and assumptions below</a>.</p>
+</div>
+<div id="mobility" class="section level1">
+<h1>Mobility</h1>
+<p>Below we show the mobility data from <span class="citation">[5]</span>. We use the indexes at a provincial level but here we plot the national indexes.</p>
+<div id="residential" class="section level2">
+<h2>Residential</h2>
+<p>Below we plot the mobility data from <span class="citation">[5]</span> for South Africa as a whole. Clear trends are observable over:</p>
+<ul>
+<li>Mobility generally reduces before the lockdown on 27 March.</li>
+<li>There is an increase in mobility in the days just before the lockdown. In particular the Grocery &amp; Pharmacy and Retail indexes. Perhaps an indication of pre-lockdown “panic buying”?</li>
+<li>Mobility is relatively stable during level 5 lockdown at low levels.</li>
+<li>Mobility increases when level 4 starts.</li>
+</ul>
+<p><img src="modelling_covid-19_in_south_africa_at_a_provinical_level_files/figure-html/unnamed-chunk-2-1.png" width="1228.8" /></p>
+<p>Below we summarise this chart into the 3 indicators used in the model:</p>
+<p><img src="modelling_covid-19_in_south_africa_at_a_provinical_level_files/figure-html/unnamed-chunk-3-1.png" width="1228.8" /></p>
+<p>We do not show them separately, but, in the model, we use the provincial versions of these indexes.</p>
+</div>
+</div>
+<div id="calibration" class="section level1">
+<h1>Calibration</h1>
+<p>This section shows the calibration of data for various provinces. Three panels are plotted for each province:</p>
+<ol style="list-style-type: decimal">
+<li>The first panel shows the modelled daily number of infections (blue) compared to confirmed case counts (brown) as reported for the province. Note that this model does not calibrate to case data, but this data is shown for reference.</li>
+<li>The second shows the daily count of deaths reported in the province (brown) and the modelled deaths in blue.</li>
+<li>The third panel shows the estimates for <span class="math inline">\(R_{t,m}\)</span> for each province.</li>
+</ol>
+<p>In all the charts the darker shaded area represents a confidence interval of 50% and the lighter shaded area represents a confidence interval of 95%.</p>
+<p>In general, it is noted:</p>
+<ul>
+<li>The model appears to be a reasonable fit to daily number of deaths reported (where there is enough data).</li>
+<li><span class="math inline">\(R_{t,m}\)</span> dropped significantly from the declaration of state of disaster, closure of schools and the implementation of lockdown.</li>
+<li><span class="math inline">\(R_{t,m}\)</span> picked up in the days ahead of the start of Level 5 lockdown, presumably as people prepared for lockdown.</li>
+<li><span class="math inline">\(R_{t,m}\)</span> dropped significantly during Level 5 lockdown. For most provinces it did not drop below 1.</li>
+<li><span class="math inline">\(R_{t,m}\)</span> moved higher after the start of Level 4 lockdown.</li>
+</ul>
+<div id="western-cape" class="section level2">
+<h2>Western Cape</h2>
+<p>The Western Cape has the most reported deaths of all provinces and hence the most data to calibrate. Below we plot the modelled infections. It’s clear that infections are far outpacing reported cases. Over the last 14 days it would appear that the Western Cape only tested 2.7% of all new infections.</p>
+<p><img src="modelling_covid-19_in_south_africa_at_a_provinical_level_files/figure-html/unnamed-chunk-4-1.png" width="1228.8" /></p>
+<p>Below we plot reported deaths in brown vs. modelled deaths in blue. This province has increasing numbers of deaths. The model appears to have a reasonable fit. The data does seem quite variable from day to day which may be perhaps data processing delays causing clumping of reported deaths.</p>
+<p><img src="modelling_covid-19_in_south_africa_at_a_provinical_level_files/figure-html/unnamed-chunk-5-1.png" width="1228.8" /></p>
+<p>Western Cape <span class="math inline">\(R_{t,m}\)</span> is currently in a band between 1.5 and 2.0 after never truly moving much below 1.5. Thus, we are probably dealing with an already rapidly spreading epidemic.</p>
+<p><img src="modelling_covid-19_in_south_africa_at_a_provinical_level_files/figure-html/unnamed-chunk-6-1.png" width="1228.8" /></p>
+</div>
+<div id="eastern-cape" class="section level2">
+<h2>Eastern Cape</h2>
+<p>Eastern Cape also has a recently had an increase in deaths. Data is still relatively sparse, but the model is clearly trending upwards to accommodate more frequent reporting of deaths. <span class="math inline">\(R_{t,m}\)</span> for Eastern Cape appears to be slightly higher than Western Cape. A concerning trend. Over the last 14 days it would appear that 2.7% of all new infections were tested.</p>
+<p><img src="modelling_covid-19_in_south_africa_at_a_provinical_level_files/figure-html/unnamed-chunk-7-1.png" width="1228.8" /></p>
+</div>
+<div id="gauteng" class="section level2">
+<h2>Gauteng</h2>
+<p>Gauteng has limited reported deaths. The long period of relatively low deaths is pulling the values of <span class="math inline">\(R_{t,m}\)</span> during level 4 lockdown to be around 1. It is encouraging to see a slower epidemic in Gauteng. Over the last 14 days it would appear that 17.3% of all new infections were tested.</p>
+<p><img src="modelling_covid-19_in_south_africa_at_a_provinical_level_files/figure-html/unnamed-chunk-8-1.png" width="1228.8" /></p>
+</div>
+<div id="kwazulu-natal" class="section level2">
+<h2>KwaZulu-Natal</h2>
+<p>KwaZulu-Natal also has limited reported deaths. The long period of relatively low deaths is pulling the values of <span class="math inline">\(R_{t,m}\)</span> during level 4 lockdown below 1. Over the last 14 days it would appear that 53.7% of all new infections were tested.</p>
+<p><img src="modelling_covid-19_in_south_africa_at_a_provinical_level_files/figure-html/unnamed-chunk-9-1.png" width="1228.8" /></p>
+</div>
+<div id="other-provinces" class="section level2">
+<h2>Other Provinces</h2>
+<p>The other provinces have extremely limited data. We should await more deaths to form a conclusive opinion on these provinces. Over the last 14 days it would appear that 12.3% of all new infections were tested.</p>
+<p><img src="modelling_covid-19_in_south_africa_at_a_provinical_level_files/figure-html/unnamed-chunk-10-1.png" width="1228.8" /></p>
+</div>
+</div>
+<div id="reproduction-number-estimates" class="section level1">
+<h1>Reproduction Number Estimates</h1>
+<div id="initial-reproduction-number" class="section level2">
+<h2>Initial Reproduction Number</h2>
+<p>Below we plot estimates for <span class="math inline">\(R_{0,m}\)</span> for each province. It is clear that the posterior estimates for <span class="math inline">\(R_{0,m}\)</span> is not heavily influenced by the data. This is probably due to the relatively early lockdown implemented in South Africa. There was not deaths that resulted from infection prior to lockdown to develop an independent estimate for each province of <span class="math inline">\(R_{0,m}\)</span>.</p>
+<p><img src="modelling_covid-19_in_south_africa_at_a_provinical_level_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
+<div id="current-reproduction-number-as-at-29-may-2020" class="section level2">
+<h2>Current Reproduction Number as at 29 May 2020</h2>
+<p>Below we plot current estimates and 95% confidence intervals for <span class="math inline">\(R_{t,m}\)</span> (current reproduction number) for each province. It’s clear that currently the values of <span class="math inline">\(R_{t,m}\)</span> are not below 1 (which would indicate an epidemic that is slowing). Only KwaZulu-Natal and Other provinces confidence intervals include 1. It is however clear that the spread of the epidemic is somewhat slowed compared to the initial <span class="math inline">\(R_{0,m}\)</span>.</p>
+<p>The wide confidence intervals would indicate that we need to wait for the epidemic to further develop to include more data in our models. The confidence intervals for Western Cape is narrowing already.</p>
+<p><img src="modelling_covid-19_in_south_africa_at_a_provinical_level_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+</div>
+</div>
+<div id="attack-ratio-as-at-29-may-2020" class="section level1">
+<h1>Attack Ratio as at 29 May 2020</h1>
+<p>With this epidemic it’s difficult to know how many people has been infected to date. This is known as the <em>attack ratio</em>. Because a number of people experience no or mild symptoms, they may not seek medical advice and not be tested. Therefore, below we plot estimates of the attack ratio of the disease to date. That is the proportion of the population of each province that have been infected. Western Cape has the highest estimated prevalence to date, but with fairly wide confidence intervals. Eastern Cape currently has the second highest prevalence.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Province</th>
+<th align="left">Attack Ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">EC</td>
+<td align="left">1.44% [0.68%-2.79%]</td>
+</tr>
+<tr class="even">
+<td align="left">GP</td>
+<td align="left">0.12% [0.06%-0.24%]</td>
+</tr>
+<tr class="odd">
+<td align="left">KZN</td>
+<td align="left">0.14% [0.09%-0.21%]</td>
+</tr>
+<tr class="even">
+<td align="left">WC</td>
+<td align="left">8.33% [4.70%-13.80%]</td>
+</tr>
+<tr class="odd">
+<td align="left">OTH</td>
+<td align="left">0.03% [0.01%-0.08%]</td>
+</tr>
+<tr class="even">
+<td align="left">South Africa</td>
+<td align="left">1.20% [0.77%-1.85%]</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="projections" class="section level1">
+<h1>Projections</h1>
+<p>One of the reasons we build models is so that we can make sense of the future or indeed the past. We can project forward models and assess the impact of varying assumptions on future outcomes to get a sense of how changes in actions may impact the future. I.e. it allows us to answer “what if” questions.</p>
+<p>Note however that in projecting the future (or indeed alternate pasts) we are extrapolating, and due care needs to be taken.</p>
+<div id="no-change-in-mobility" class="section level2">
+<h2>No change in Mobility</h2>
+<p><strong><em>TO DO</em></strong></p>
+</div>
+<div id="future-changes-in-mobility" class="section level2">
+<h2>Future changes in Mobility</h2>
+<p>Below we consider future scenarios on mobility. Given that we are generally seeing a relaxation of lockdown we a may well see increased mobility in the future. So, we will consider a scenario of mobility increasing from current 50% to normal. I.e. halfway between what we have now and what we would have under normal circumstances as implied by <span class="citation">[5]</span>.</p>
+<p><strong><em>TO DO</em></strong></p>
+</div>
+<div id="alternate-past---no-lockdown" class="section level2">
+<h2>Alternate Past - No Lockdown?</h2>
+<p><strong><em>TO DO</em></strong></p>
+</div>
+<div id="alternate-past---early-lockdown-release" class="section level2">
+<h2>Alternate Past - Early Lockdown Release</h2>
+<p><strong><em>TO DO</em></strong></p>
+</div>
+</div>
+<div id="back-testing" class="section level1">
+<h1>Back-Testing</h1>
+<p>Here the intention is to test the model on data up to say x-days ago and test the x-day projection accuracy. This period can be extended over time.</p>
+<div id="day-back-test" class="section level2">
+<h2>7-day Back Test</h2>
+<p><strong><em>TO DO</em></strong></p>
+</div>
+<div id="day-back-test-1" class="section level2">
+<h2>14-day Back Test</h2>
+<p><strong><em>TO DO</em></strong></p>
+</div>
+</div>
+<div id="discussion" class="section level1">
+<h1>Discussion</h1>
+<div id="limitations" class="section level2">
+<h2>Limitations</h2>
+<p>This analysis has some limitations:</p>
+<ul>
+<li>The models are based on somewhat limited data for South Africa. In particular the effects of lockdown in some of the provinces may be simple “extrapolations” using the fixed effects (<span class="math inline">\(\alpha_{k}\)</span>) and shared prior of <span class="math inline">\(R_{0,m}\)</span>, based on the effect in provinces with more data such as Western Cape. As these fits are updated with new data though the models should be more accurate for each province resulting in better estimates given.</li>
+<li>No back-testing has yet been done given the limited data. The author is keeping past projections of the model to test accuracy of the model over time.</li>
+<li>The models are simplistic high-level single population models for each province. It contains no differentiation by age groups or any further details. This is required to make the hierarchical models manageable. It seems still to provide useful information on potential movements in the epidemic.</li>
+<li>The models do not take account to changes of interventions that do not impact general mobility such as mask wearing, social distancing, handwashing and testing, tracing and isolation. The models do take account of the average impact of these interventions over time, but changes in these interventions will not be taken account of. For example, increases in masks usage and testing may result in <span class="math inline">\(R_{t,m}\)</span> increases to be less with increased mobility.</li>
+<li>Google Mobility data may not effectively cover the South African population. It’s unclear how uniform the coverage is in say lower income populations who may have limited data and hence not contribute significantly to the mobility indexes.</li>
+<li>IFR assumptions may be wrong:
+<ul>
+<li>It’s based on Chinese data and may therefore be higher or lower in SA. The IFR employed though has been found consistent with various sources <span class="citation">[7]</span>.</li>
+<li>It does not consider health system capacity. In adverse scenarios the IFR is likely to increase if health system capacity is exceeded.</li>
+</ul></li>
+<li>The model assumes that all COVID-19 deaths are captured and reported via NICD into <span class="citation">[4]</span>. If this record is not complete the model may underestimate deaths.</li>
+</ul>
+</div>
+<div id="impact-of-interventions" class="section level2">
+<h2>Impact of Interventions</h2>
+<p>From the results it’s clear that <span class="math inline">\(R_{t,m}\)</span> in all provinces has likely been reduced from <span class="math inline">\(R_{0,m}\)</span> and this has slowed the spread of the epidemic in South Africa saving lives. However, in Europe the lockdowns have been able to reduce <span class="math inline">\(R_{t}\)</span> for various countries below 1 <span class="citation">[8]</span>. South Africa’s lockdowns and other interventions have not been as successful as in most European countries.</p>
+</div>
+<div id="lockdown---level-4" class="section level2">
+<h2>Lockdown - Level 4</h2>
+<p>It’s clear that mobility has increase somewhat following the commencement of level 4 lockdowns. This results in an increasing the <span class="math inline">\(R_{t,m}\)</span> in various provinces since the start of May. The death data corresponding to this increased <span class="math inline">\(R_{t,m}\)</span> is unlikely to be significant as yet and we will soon see whether this model is handling this accurately, or if potentially through other interventions the Level 4 is not increasing <span class="math inline">\(R_{t,m}\)</span>.</p>
+</div>
+<div id="further-relaxation-of-lockdown" class="section level2">
+<h2>Further Relaxation of Lockdown</h2>
+<p>It’s clear that projections on current mobility levels would already result in significant peaks in deaths in July and August.<br />
+Further to that an increase from current mobility 50% back to normal mobility would significantly worsen these peaks.</p>
+</div>
+<div id="relevance-of-ifr" class="section level2">
+<h2>Relevance of IFR</h2>
+<p>The IFR is not treated as a parameter but as a constant with random noise. Changes to the IFR will change the modelled infections that correlate with the observed deaths. Sensitivity to the IFR could be modelled.</p>
+</div>
+<div id="using-mobility-data" class="section level2">
+<h2>Using Mobility Data</h2>
+<p>Using mobility data is useful to not only measure the impact of government interventions but also include the societal response to those interventions (as they affect mobility). This means that changes in the reaction to new regulations can be modelled. It may also be useful going forward as many new regulations are introduced possibly at a provincial level to summarise the impact of interventions numerically.</p>
+</div>
+<div id="further-work" class="section level2">
+<h2>Further Work</h2>
+<p>The author intends to:</p>
+<ul>
+<li>Continually update these model fits as new data emerges.</li>
+<li>Search and include further indexes that may track other interventions to model their effect.</li>
+<li>Produce similar models for a selection of countries.</li>
+<li>Back test earlier models against new data.</li>
+<li>Analyse the sensitivity of results to changes in IFR.</li>
+</ul>
+</div>
+</div>
+<div id="detailed-assumptions-and-methodology" class="section level1">
+<h1>Detailed Assumptions and Methodology</h1>
+<p>The model assumes that current reproduction number, <span class="math inline">\(R_{t,m}\)</span>, is a function of the initial reproduction number, <span class="math inline">\(R_{0,m}\)</span>, and mobility changes over time. It then calculates infections as a function of <span class="math inline">\(R_{t,m}\)</span> over time, and then, using these infections calculates deaths from the infections based on a distribution of time to death. Various prior distributions are assumed. The model structure is identical to that in <span class="citation">[1]</span> but is briefly documented below. The parameters are estimated jointly using a single hierarchical model covering all provinces. This means that data in different provinces are combined to inform all parameters in the model. As per <span class="citation">[1]</span>, fitting was done in R using Stan with an adaptive Hamiltonian Monte Carlo sampler.</p>
+<div id="the-model" class="section level2">
+<h2>The Model</h2>
+<p>The model assumes a base reproduction number (<span class="math inline">\(R_{0,m}\)</span>) for each province (<span class="math inline">\(m\)</span>) and models future values of the reproduction number using mobility indexes as follows:</p>
+<p><span class="math inline">\(R_{t,m}=R_{0,m}(\phi^{-1}(-\sum_{k=1}^{3}(\alpha_{k}+\beta_{k,m})I_{k,t,m}))\)</span></p>
+<p>Here:</p>
+<ul>
+<li><span class="math inline">\(t\)</span> is the day.</li>
+<li><span class="math inline">\(\phi^{-1}\)</span> is the inverse logit function.</li>
+<li><span class="math inline">\(I_{k,t,m}\)</span> are the mobility indexes from Google Mobility <span class="citation">[5]</span> data for each province over time. Typical movements are presented by 0 and atypically movements are represented by increases or decreases to the above.</li>
+<li><span class="math inline">\(\alpha_{k}\)</span> is the effect of mobility index <span class="math inline">\(I_{k,t,m}\)</span> on <span class="math inline">\(R_{t,m}\)</span> independent of province.</li>
+<li><span class="math inline">\(\beta_{k,m}\)</span> is the province specific effect of mobility index <span class="math inline">\(I_{k,t,m}\)</span> on <span class="math inline">\(R_{t,m}\)</span>.</li>
+</ul>
+<p>Infections are modelled as:</p>
+<p><span class="math inline">\(c_{t,m}=S_{t,m}R_{t,m}\sum_{\tau=0}^{t-1}c_{\tau,m}g_{t-\tau}\)</span> where <span class="math inline">\(S_{t,m}=1 - \frac{\sum_{i=0}^{t-1}c_{i,m}}{N_{m}}\)</span>.</p>
+<p>Infections, <span class="math inline">\(c_{t,m}\)</span> at time <span class="math inline">\(t\)</span> are a function of proportion of population not yet infected (<span class="math inline">\(S_{t,m}\)</span>), the reproduction number (<span class="math inline">\(R_{t,m}\)</span>) and infections prior to that <span class="math inline">\(c_{\tau,m}\)</span> as well as an infectiousness curve <span class="math inline">\(g_{t-\tau}\)</span>. <span class="math inline">\(N_m\)</span> is the population in province <span class="math inline">\(m\)</span>.</p>
+<p>Deaths, <span class="math inline">\(d_{t,m}\)</span> are modelled as:</p>
+<p><span class="math inline">\(d_{t,m}=ifr_{m}^*\sum_{\tau=0}^{t-1}c_{\tau,m}\pi_{t-\tau}\)</span></p>
+<p>Here:</p>
+<ul>
+<li><span class="math inline">\(ifr_{m}^*\)</span> is the average infection fatality rate (IFR) in the province (with random noise added).</li>
+<li><span class="math inline">\(\pi_{t-\tau}\)</span> is a distribution of time to death since infection.</li>
+</ul>
+</div>
+<div id="prior-assumptions-and-random-noise" class="section level2">
+<h2>Prior Assumptions and Random Noise</h2>
+<p>The following assumptions are taken as is from <span class="citation">[1]</span>.</p>
+<p>We add random noise to the IFR as follows:</p>
+<p><span class="math inline">\(ifr_{m}^*=ifr_{m}\cdot N(1,0.1)\)</span></p>
+<p><span class="math inline">\(\alpha_{k}\)</span> is normally distributed with a 0 mean:</p>
+<p><span class="math inline">\(\alpha_{k} \sim N(0,0.5)\)</span></p>
+<p>If <span class="math inline">\(Y \sim N(\mu,\sigma)\)</span> then we define <span class="math inline">\(N^{+}\)</span> to mean the distribution of <span class="math inline">\(|Y| \sim N^{+}(0,0.5)\)</span>.</p>
+<p>Then for the provincial specific index effects we use:</p>
+<p><span class="math inline">\(\beta_{k,m} \sim N(0,\gamma)\)</span> with <span class="math inline">\(\gamma \sim N^{+}(0,0.5)\)</span></p>
+<p>The <span class="math inline">\(R_{0,m}\)</span> are defined to be distributed normally as follows:</p>
+<p><span class="math inline">\(R_{0,m} \sim N(3.28,\kappa)\)</span> with <span class="math inline">\(\kappa \sim N^{+}(0,0.5)\)</span></p>
+<p>Infectiousness follows this distribution:</p>
+<p><span class="math inline">\(g \sim Gamma(6.5,0.62)\)</span></p>
+<p>Time to death follows this distribution:</p>
+<p><span class="math inline">\(\pi \sim Gamma(5.1,0.86)+Gamma(17.8,0.45)\)</span></p>
+</div>
+<div id="death-and-confirmed-case-data" class="section level2">
+<h2>Death and Confirmed Case Data</h2>
+<p>Death and case data were used from <span class="citation">[4]</span>. This data set contains, amongst other, provincial case and deaths data digitised mainly from daily tweets by National Institute of Communicable Diseases (NICD).</p>
+<p>We note again that the model calibrates to only the deaths. The reason for not calibrating to confirmed cases is that the bias in the testing is unknown. The degree to which testing has focussed on symptomatic and people seeking medical treatment or hospital treatment is unknown and could have changed over time. This would present a biased estimate and would require adjustment in this model.</p>
+<p>Based on limited death data, provinces were aggregated as follows:</p>
+<ul>
+<li>EC – Eastern Cape</li>
+<li>GP – Gauteng</li>
+<li>KZN – KwaZulu Natal</li>
+<li>WC – Western Cape</li>
+<li>OTH (all other provinces)</li>
+</ul>
+</div>
+<div id="infection-fatality-rates-ifr" class="section level2">
+<h2>Infection Fatality Rates (IFR)</h2>
+<p>The IFR (<span class="math inline">\(ifr_{m}\)</span>) for each province was calculated using the output of the squire R package <span class="citation">[9]</span>. It produces an age-specific infection attack ratios (IAR), infections and deaths. The per age band IFR were used together with the per age band IAR and these were applied to provincial populations <span class="citation">[10]</span>. The IFRs from squire package are based on <span class="citation">[11]</span>, <span class="citation">[12]</span> and <span class="citation">[9]</span>.</p>
+<p>The projection was done doing the default parameters for South Africa and the resultant attack ratio (<span class="math inline">\(a_{x}\)</span>) and IFR (<span class="math inline">\(ifr_{x}\)</span>) for each 5-year age band was obtained (<span class="math inline">\(x\)</span>).</p>
+<p>These <span class="math inline">\(a_{x}\)</span> and <span class="math inline">\(ifr_{x}\)</span> were then applied to the South African population per province and age band as per <span class="citation">[10]</span> and weighted IFRs calculated as follows.</p>
+<p><span class="math inline">\(ifr_{m}=\frac{\sum_{x}N_{x,m} \cdot a_{x} \cdot ifr_{x}}{\sum_{x}N_{x,m}}\)</span></p>
+<p>Here <span class="math inline">\(N_{x,m}\)</span> is the population in a particular province (<span class="math inline">\(m\)</span>) and age band (<span class="math inline">\(x\)</span>).</p>
+<p>Below we tabulate the resultant <span class="math inline">\(ifr_{m}\)</span>:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Province</th>
+<th align="left">IFR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">EC</td>
+<td align="left">0.59%</td>
+</tr>
+<tr class="even">
+<td align="left">GP</td>
+<td align="left">0.39%</td>
+</tr>
+<tr class="odd">
+<td align="left">KZN</td>
+<td align="left">0.4%</td>
+</tr>
+<tr class="even">
+<td align="left">WC</td>
+<td align="left">0.48%</td>
+</tr>
+<tr class="odd">
+<td align="left">OTH</td>
+<td align="left">0.44%</td>
+</tr>
+<tr class="even">
+<td align="left">South Africa</td>
+<td align="left">0.44%</td>
+</tr>
+</tbody>
+</table>
+<p>The differences between provinces reflect the different age profiles in those provinces as per <span class="citation">[10]</span>. This seems low compared to the IFRs in <span class="citation">[7]</span>, but may be reasonable given the younger profile of the South African population.</p>
+</div>
+<div id="mobility-indexes" class="section level2">
+<h2>Mobility Indexes</h2>
+<p>These data contain the mobility indexes for each province. These are described in <span class="citation">[5]</span> as follows:</p>
+<ul>
+<li>Grocery &amp; pharmacy: Mobility trends for places like grocery markets, food warehouses, farmers markets, specialty food shops, drug stores, and pharmacies.</li>
+<li>Parks: Mobility trends for places like local parks, national parks, public beaches, marinas, dog parks, plazas, and public gardens.</li>
+<li>Transit stations: Mobility trends for places like public transport hubs such as subway, bus, and train stations.</li>
+<li>Retail &amp; recreation: Mobility trends for places like restaurants, cafes, shopping centres, theme parks, museums, libraries, and movie theatres.</li>
+<li>Residential: Mobility trends for places of residence.</li>
+<li>Workplaces: Mobility trends for places of work.</li>
+</ul>
+<p>These measure relative changes in mobility in above dimensions relative to a baseline established before the epidemic. For example, -30% implies a 30% reduction in mobility from pre-COVID-19 mobility.</p>
+<p>As per [1] these data were combined into 2 indexes for each province as follows:</p>
+<ul>
+<li>Residential</li>
+<li>Average of the rest</li>
+</ul>
+<p>In <span class="citation">[1]</span> three indexes were used (Residential, Transit and the rest). This was reduced for this paper due to limited data.</p>
+<p>We calculated indexes for OTH by weighting the individual provinces by population.</p>
+</div>
+</div>
+<div id="author" class="section level1">
+<h1>Author</h1>
+<p>This report was prepared by Louis Rossouw. Please get in contact with Louis Rossouw if you have comments or wish to receive this regularly.</p>
+<p><strong>Louis Rossouw</strong><br />
+Head of Research &amp; Analytics<br />
+Gen Re | Life/Health Canada, South Africa, Australia, NZ, UK &amp; Ireland<br />
+Email: <a href="mailto:LRossouw@genre.com">LRossouw@GenRe.com</a> Mobile: +27 71 355 2550</p>
+<p><strong><em>The views in this document represents that of the author and may not represent those of Gen Re. Also note that given the significant uncertainty involved with the parameters, data and methodology care should be taken with these numbers and any use of these numbers.</em></strong></p>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-Volmer2020">
+<p>[1] Volmer et al., “Report 20 - using mobility to estimate the transmission intensity of COVID-19 in Italy: A subnational analysis with future scenarios,” Imperial College, London, 2020 [Online]. Available: <a href="https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-20-italy/">https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-20-italy/</a></p>
+</div>
+<div id="ref-Mellan2020">
+<p>[2] Mellan et al., “Report 21: Estimating COVID-19 cases and reproduction number in brazil,” Imperial College, London, 2020 [Online]. Available: <a href="https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-21-brazil/">https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-21-brazil/</a></p>
+</div>
+<div id="ref-Unwin2020">
+<p>[3] Unwin et al., “Report 23 - state-level tracking of COVID-19 in the united states,” Imperial College, London, 2020 [Online]. Available: <a href="https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-23-united-states/">https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-23-united-states/</a></p>
+</div>
+<div id="ref-Marivate2020">
+<p>[4] Marivate et al., “Coronavirus disease (COVID-19) case data - South Africa.” [Online]. Available: <a href="https://github.com/dsfsi/covid19za">https://github.com/dsfsi/covid19za</a></p>
+</div>
+<div id="ref-Google2020">
+<p>[5] Google LLC, “Google covid-19 community mobility reports.” [Online]. Available: <a href="https://www.google.com/covid19/mobility/">https://www.google.com/covid19/mobility/</a></p>
+</div>
+<div id="ref-R2019">
+<p>[6] R Core Team, <em>R: A language and environment for statistical computing</em>. Vienna, Austria: R Foundation for Statistical Computing, 2019 [Online]. Available: <a href="https://www.R-project.org/">https://www.R-project.org/</a></p>
+</div>
+<div id="ref-Meyerowitz2020">
+<p>[7] G. Meyerowitz-Katz and L. Merone, “A systematic review and meta-analysis of published research data on COVID-19 infection-fatality rates,” Cold Spring Harbor Laboratory Press, 2020 [Online]. Available: <a href="https://www.medrxiv.org/content/early/2020/05/27/2020.05.03.20089854">https://www.medrxiv.org/content/early/2020/05/27/2020.05.03.20089854</a></p>
+</div>
+<div id="ref-Flaxman2020">
+<p>[8] Flaxman et al., “Report 13 - estimating the number of infections and the impact of non-pharmaceutical interventions on COVID-19 in 11 European countries,” Imperial College, London, 2020 [Online]. Available: <a href="https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-13-europe-npi-impact/">https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-13-europe-npi-impact/</a></p>
+</div>
+<div id="ref-Walker2020">
+<p>[9] Walker et al., “Report 12 - the global impact of COVID-19 and strategies for mitigation and suppression,” Imperial College, London, 2020 [Online]. Available: <a href="https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-12-global-impact-covid-19/">https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-12-global-impact-covid-19/</a></p>
+</div>
+<div id="ref-StatsSA2020">
+<p>[10] Statistics South Africa, “Mid-year population estimates 2019,” Republic of South Africa, London, 2019. </p>
+</div>
+<div id="ref-Verity2020">
+<p>[11] Verity et al., “Estimates of the severity of coronavirus disease 2019: A model-based analysis,” <em>The Lancet Infectious Diseases</em>, 2020 [Online]. Available: <a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext">https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext</a></p>
+</div>
+<div id="ref-Ferguson2020">
+<p>[12] Ferguson et al., “Report 9 - impact of non-pharmaceutical interventions (NPIs) to reduce COVID-19 mortality and healthcare demand,” Imperial College, London, 2020 [Online]. Available: <a href="https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-9-impact-of-npis-on-covid-19/">https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-9-impact-of-npis-on-covid-19/</a></p>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
