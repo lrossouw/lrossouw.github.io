@@ -8,4 +8,4 @@ In this paper we model the COVID-19 epidemic in South Africa. Mobility data is u
 
 The version here will be updated roughly daily.
 
-Read the paper [here](modelling_covid-19_in_south_africa_at_a_provinical_level.html).
+Read the paper [here](modelling_covid-19_in_south_africa_at_a_provinical_level.md).
