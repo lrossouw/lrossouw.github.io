@@ -10,9 +10,10 @@ The version here will be updated roughly daily.
 
 Read the paper [here](modelling_covid-19_in_south_africa_at_a_provincial_level.md).
 
+## [Estimating the Reproductive Number of COVID-19](estimating_r.nb.html) 
+
+This paper contains estimates for the reproductive number $R_{t} over time for a number of countries. Read the paper [here](estimating_r.nb.html).
 
 ## [Estimating the Reproductive Number of COVID-19 in South Africa](estimating_r_south_africa.nb.html) 
 
-This paper contains estimates for the reproductive number $R_{t} over time.  This is done as described in [@Cori2013].  These have been implemented in R using `EpiEstim` package [@Cori2013a] which is what is used here.  
-
-Read the paper [here](estimating_r_south_africa.nb.html).
+As above, this paper contains estimates for the reproductive number $R_{t} over time for South Africa and it's provinces. Read the paper [here](estimating_r_south_africa.nb.html).
