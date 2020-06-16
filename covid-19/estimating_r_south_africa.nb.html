@@ -11,7 +11,7 @@
 
 <meta name="author" content="Louis Rossouw" />
 
-<meta name="date" content="2020-06-14" />
+<meta name="date" content="2020-06-16" />
 
 <title>Estimating the Reproductive Number of COVID-19 in South Africa</title>
 
@@ -1485,8 +1485,8 @@ window.initializeCodeFolding = function(show) {
 
     // create a collapsable div to wrap the code in
     var div = $('<div class="collapse r-code-collapse"></div>');
-    if (show || $(this)[0].classList.contains('fold-show'))
-      div.addClass('in');
+    show = (show || $(this).hasClass('fold-show')) && !$(this).hasClass('fold-hide');
+    if (show) div.addClass('in');
     var id = 'rcode-643E0F36' + currentIndex++;
     div.attr('id', id);
     $(this).before(div);
@@ -2008,7 +2008,7 @@ summary {
 
 <h1 class="title toc-ignore">Estimating the Reproductive Number of COVID-19 in South Africa</h1>
 <h4 class="author">Louis Rossouw</h4>
-<h4 class="date">2020-06-14</h4>
+<h4 class="date">2020-06-16</h4>
 
 </div>
 
