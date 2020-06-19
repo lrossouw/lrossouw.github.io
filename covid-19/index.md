@@ -10,7 +10,7 @@ The version here will be updated roughly daily.
 
 Read the paper [here](modelling_covid-19_in_south_africa_at_a_provincial_level.md).
 
-## [Estimating the Reproductive Number of COVID-19](estimating_r.nb.html) 
+## [Estimating the Reproductive Number of COVID-19](estimating_r.html) 
 
-This paper contains estimates for the reproductive number $R_{t} over time for a number of countries including South Africa and details of these measurements at a provincial level for South Africa. Read the paper [here](estimating_r.nb.html).
+This paper contains estimates for the reproductive number $R_{t} over time for a number of countries including South Africa and details of these measurements at a provincial level for South Africa. Read the paper [here](estimating_r.html).
 
