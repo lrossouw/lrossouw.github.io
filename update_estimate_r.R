@@ -10,7 +10,7 @@ file.copy(from = "../COVID-19/rt_estimates/Rt_data.csv",
 
 
 #git message
-message = paste0("Update estimating_r on ", format(Sys.Date(), "%Y-%m-%d"))
+message = paste0("Update estimating_r on ", Sys.time())
 
 # git stuff
 source("git_tools.R")
