@@ -1,7 +1,7 @@
 # Update model to website.
 
 # copy data
-file_list = list.files(path = "../COVID-19/report13_model/South_Africa/results/",
+file_list = list.files(path = "../covid19model/South_Africa/results/",
                        pattern = "^projections-mob-base-south_africa-365-",
                        full.names = TRUE)
 
@@ -9,7 +9,7 @@ file.copy(from = file_list,
           to = "covid-19/",
           overwrite = TRUE)
 
-file.copy(from = "../COVID-19/covid19model/modelling_covid-19_in_south_africa_at_a_provincial_level.html",
+file.copy(from = "../covid19model/modelling_covid-19_in_south_africa_at_a_provincial_level.html",
           to = "covid-19/",
           overwrite = TRUE)
 
