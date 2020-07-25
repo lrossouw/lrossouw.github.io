@@ -2,7 +2,7 @@
 
 # copy data
 file_list = list.files(path = "../covid19model/South_Africa/results/",
-                       pattern = "^projections-mob-base-south_africa-365-",
+                       pattern = "^projections-mob-base-south_africa-",
                        full.names = TRUE)
 
 file.copy(from = file_list,
