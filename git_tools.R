@@ -1,12 +1,12 @@
 
-git_add_all <- function(path) {
+git_add <- function(path, path_to_add) {
   command = paste0("git ",
                    "-C ",
                    "\"",
                    path,
                    "\" ",
                    "add ",
-                   "-A ")
+                   path_to_add)
   system(command, show.output.on.console = TRUE)
 }
 
@@ -42,13 +42,4 @@ git_push <- function(path) {
                    "\" ",
                    "push")
   system(command, show.output.on.console = TRUE)
-}
-
-git_update <- function(path, message=NULL) {
-  if(is.null(message)){
-    message=paste0("Update at ",format(Sys.time(),))
-  }
-  git_add_all(path)
-  git_commit(path, message)
-  git_push(path)
 }

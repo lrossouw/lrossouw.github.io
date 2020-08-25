@@ -1,4 +1,4 @@
-# Update rt_estiamtes on website
+# Update rt_estimates on website
 
 # copy data
 file.copy(from = "../rt_estimates/estimating_r.html",
@@ -9,10 +9,12 @@ file.copy(from = "../rt_estimates/Rt_data.csv",
           overwrite = TRUE)
 
 
-#git message
-message = paste0("Update estimating_r on ", Sys.time())
 
 # git stuff
 source("git_tools.R")
-git_update(path = ".",
-           message = message)
+message = paste0("Update estimating_r on ", Sys.time())
+path = "."
+git_add(path, path_to_add = "covid-19/estimating_r.html")
+git_add(path, path_to_add = "covid-19/Rt_data.csv")
+git_commit(path, message)
+git_push(path)

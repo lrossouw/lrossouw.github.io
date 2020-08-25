@@ -13,8 +13,11 @@ file.copy(from = "../covid19model/modelling_covid-19_in_south_africa_at_a_provin
           to = "covid-19/",
           overwrite = TRUE)
 
-message = paste0("Update SA COVID-19 Model ",Sys.time())
-
+# do git stuff
 source("git_tools.R")
-git_update(path = ".",
-           message = message)
+message = paste0("Update SA COVID-19 Model ", Sys.time())
+path = "."
+git_add(path, path_to_add = "covid-19/modelling_covid-19_in_south_africa_at_a_provincial_level.html")
+git_add(path, path_to_add = "covid-19/projections-mob-base-south_africa*")
+git_commit(path, message)
+git_push(path)
