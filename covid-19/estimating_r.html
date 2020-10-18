@@ -1816,12 +1816,12 @@ div.tocify {
 <p>To view results of this methodology please refer to the following:</p>
 <ul>
 <li><a href="https://lrossouw.github.io/covid-19/estimating_r_za.html">Estimating the Effective Reproduction Number of COVID-19 in South Africa</a>.</li>
-<li><a href="https://lrossouw.github.io/covid-19/estimating_r_za.html">Estimating the Effective Reproduction Number of COVID-19 in South Africa</a>.</li>
+<li><a href="https://lrossouw.github.io/covid-19/estimating_r_world.html">Estimating the Effective Reproduction Number of COVID-19 by Country</a>.</li>
 </ul>
 </div>
 <div id="updates" class="section level1">
 <h1><span class="header-section-number">2</span> Updates</h1>
-<p>As this paper is updated over time this section will summarise significant changes. The code producing this paper is tracked using Git. The Git commit hash for this project at the time of generating this paper was b7cc72bcbeb5604e414e631819f05f6f743e887c.</p>
+<p>As this paper is updated over time this section will summarise significant changes. The code producing this paper is tracked using Git. The Git commit hash for this project at the time of generating this paper was 1da324b2356210446e037c26f8a738525f1a0b2b.</p>
 <p><strong>2020-06-12</strong></p>
 <ul>
 <li>Initial version.</li>
@@ -1871,10 +1871,8 @@ div.tocify {
 <p>Based on the table in Appendix 2 of <span class="citation">[1]</span> we believe a window of 7-days to be reasonable as long as that window contains 12 or more cases or deaths.</p>
 </div>
 </div>
-<div id="estimate-r_tm" class="section level1">
-<h1><span class="header-section-number">4</span> Estimate <span class="math inline">\(R_{t,m}\)</span></h1>
-<div id="estimation-routine" class="section level2">
-<h2><span class="header-section-number">4.1</span> Estimation Routine</h2>
+<div id="estimating-r_tm" class="section level1">
+<h1><span class="header-section-number">4</span> Estimating <span class="math inline">\(R_{t,m}\)</span></h1>
 <p>The analysis works backwards and fits <span class="math inline">\(R_{t,m}\)</span> values for whole weeks (ending on the last date in the data) using the <code>EpiEstim</code> package.</p>
 <p>So <span class="math inline">\(t\)</span> is based on the date of reporting (be that cases or deaths) and <span class="math inline">\(m\)</span> is the country or province. Two values are estimated for each country:</p>
 <ol style="list-style-type: decimal">
@@ -1882,7 +1880,6 @@ div.tocify {
 <li><span class="math inline">\(R_{t,m}^{deaths}\)</span> is the reproductive number implied by the deaths reported at time <span class="math inline">\(t\)</span> in country <span class="math inline">\(m\)</span>.</li>
 </ol>
 <p>Note that the time periods are left unadjusted, though in reality the <span class="math inline">\(R_{t,m}^{deaths}\)</span> should be shifted back approximately 2 weeks relative to <span class="math inline">\(R_{t,m}^{cases}\)</span>.</p>
-</div>
 </div>
 <div id="discussion" class="section level1">
 <h1><span class="header-section-number">5</span> Discussion</h1>
