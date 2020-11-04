@@ -10,8 +10,8 @@ These will be updated roughly once a week.
 
 Read the papers here:
 
-* [South Africa](modelling_covid-19_in_south_africa_at_a_provincial_level.md).
-* [Canada](modelling_covid-19_in_canada_at_a_provincial_level.md).
+* [South Africa](modelling_covid-19_in_south_africa_at_a_provincial_level.html).
+* [Canada](modelling_covid-19_in_canada_at_a_provincial_level.html).
 
 ## Estimating the Reproductive Number of COVID-19
 
