@@ -10,16 +10,16 @@ These will be updated roughly once a week.
 
 Read the papers here:
 
-* [South Africa](modelling_covid-19_in_south_africa_at_a_provincial_level.html).
-* [Canada](modelling_covid-19_in_canada_at_a_provincial_level.html).
+* [South Africa](modelling_covid-19_in_south_africa_at_a_provincial_level.html)
+* [Canada](modelling_covid-19_in_canada_at_a_provincial_level.html)
 
 ## Estimating the Reproductive Number of COVID-19
 
 These papers contain estimates for the reproductive number $R_{t} over time for a number of countries including South Africa and details of these measurements at a provincial level for South Africa. 
 
-* [Methodology](estimating_r.html).
-* [South Africa](estimating_r_za.html).
-* [Canada](estimating_r_ca.html).
-* [World Countries](estimating_r_world.html).
+* [Methodology](estimating_r.html)
+* [South Africa](estimating_r_za.html)
+* [Canada](estimating_r_ca.html)
+* [World Countries](estimating_r_world.html)
 
 The above are updated multiple times per week.
