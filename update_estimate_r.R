@@ -29,6 +29,7 @@ file.copy(from = "../rt_estimates/Rt_data_za.csv",
 source("git_tools.R")
 message = paste0("Update estimating_r on ", Sys.time())
 path = "."
+git_pull(path)
 git_add(path, path_to_add = "covid-19/estimating_r.html")
 git_add(path, path_to_add = "covid-19/estimating_r_world.html")
 git_add(path, path_to_add = "covid-19/estimating_r_ca.html")

@@ -43,3 +43,13 @@ git_push <- function(path) {
                    "push")
   system(command, show.output.on.console = TRUE)
 }
+
+git_pull <- function(path) {
+  command = paste0("git ",
+                   "-C ",
+                   "\"",
+                   path,
+                   "\" ",
+                   "pull")
+  system(command, show.output.on.console = TRUE)
+}
