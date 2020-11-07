@@ -10,6 +10,9 @@ file.copy(from = "../rt_estimates/estimating_r_world.html",
 file.copy(from = "../rt_estimates/estimating_r_ca.html",
           to = "covid-19/",
           overwrite = TRUE)
+file.copy(from = "../rt_estimates/estimating_r_uk.html",
+          to = "covid-19/",
+          overwrite = TRUE)
 file.copy(from = "../rt_estimates/estimating_r_za.html",
           to = "covid-19/",
           overwrite = TRUE)
@@ -17,6 +20,9 @@ file.copy(from = "../rt_estimates/Rt_data.csv",
           to = "covid-19/",
           overwrite = TRUE)
 file.copy(from = "../rt_estimates/Rt_data_ca.csv",
+          to = "covid-19/",
+          overwrite = TRUE)
+file.copy(from = "../rt_estimates/Rt_data_uk.csv",
           to = "covid-19/",
           overwrite = TRUE)
 file.copy(from = "../rt_estimates/Rt_data_za.csv",
@@ -33,9 +39,11 @@ git_pull(path)
 git_add(path, path_to_add = "covid-19/estimating_r.html")
 git_add(path, path_to_add = "covid-19/estimating_r_world.html")
 git_add(path, path_to_add = "covid-19/estimating_r_ca.html")
+git_add(path, path_to_add = "covid-19/estimating_r_uk.html")
 git_add(path, path_to_add = "covid-19/estimating_r_za.html")
 git_add(path, path_to_add = "covid-19/Rt_data.csv")
 git_add(path, path_to_add = "covid-19/Rt_data_ca.csv")
+git_add(path, path_to_add = "covid-19/Rt_data_uk.csv")
 git_add(path, path_to_add = "covid-19/Rt_data_za.csv")
 git_commit(path, message)
 git_push(path)
