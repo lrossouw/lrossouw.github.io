@@ -28,6 +28,9 @@ file.copy(from = "../rt_estimates/Rt_data_uk.csv",
 file.copy(from = "../rt_estimates/Rt_data_za.csv",
           to = "covid-19/",
           overwrite = TRUE)
+file.copy(from = "../rt_estimates/uk_utla.gif",
+          to = "covid-19/",
+          overwrite = TRUE)
 
 
 
@@ -45,5 +48,6 @@ git_add(path, path_to_add = "covid-19/Rt_data.csv")
 git_add(path, path_to_add = "covid-19/Rt_data_ca.csv")
 git_add(path, path_to_add = "covid-19/Rt_data_uk.csv")
 git_add(path, path_to_add = "covid-19/Rt_data_za.csv")
+git_add(path, path_to_add = "covid-19/uk_utla.gif")
 git_commit(path, message)
 git_push(path)
