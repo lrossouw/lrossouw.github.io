@@ -1,53 +1,52 @@
 # Update rt_estimates on website
 
-# copy data
-file.copy(from = "../rt_estimates/estimating_r.html",
-          to = "covid-19/",
-          overwrite = TRUE)
-file.copy(from = "../rt_estimates/estimating_r_world.html",
-          to = "covid-19/",
-          overwrite = TRUE)
-file.copy(from = "../rt_estimates/estimating_r_ca.html",
-          to = "covid-19/",
-          overwrite = TRUE)
-file.copy(from = "../rt_estimates/estimating_r_uk.html",
-          to = "covid-19/",
-          overwrite = TRUE)
-file.copy(from = "../rt_estimates/estimating_r_za.html",
-          to = "covid-19/",
-          overwrite = TRUE)
-file.copy(from = "../rt_estimates/Rt_data.csv",
-          to = "covid-19/",
-          overwrite = TRUE)
-file.copy(from = "../rt_estimates/Rt_data_ca.csv",
-          to = "covid-19/",
-          overwrite = TRUE)
-file.copy(from = "../rt_estimates/Rt_data_uk.csv",
-          to = "covid-19/",
-          overwrite = TRUE)
-file.copy(from = "../rt_estimates/Rt_data_za.csv",
-          to = "covid-19/",
-          overwrite = TRUE)
-file.copy(from = "../rt_estimates/uk_utla.gif",
-          to = "covid-19/",
-          overwrite = TRUE)
+# clear all
+rm(list = ls())
 
-
-
-# git stuff
+# git tools
 source("git_tools.R")
-message = paste0("Update estimating_r on ", Sys.time())
+
+# set path
 path = "."
+
+# git pull
 git_pull(path)
-git_add(path, path_to_add = "covid-19/estimating_r.html")
-git_add(path, path_to_add = "covid-19/estimating_r_world.html")
-git_add(path, path_to_add = "covid-19/estimating_r_ca.html")
-git_add(path, path_to_add = "covid-19/estimating_r_uk.html")
-git_add(path, path_to_add = "covid-19/estimating_r_za.html")
-git_add(path, path_to_add = "covid-19/Rt_data.csv")
-git_add(path, path_to_add = "covid-19/Rt_data_ca.csv")
-git_add(path, path_to_add = "covid-19/Rt_data_uk.csv")
-git_add(path, path_to_add = "covid-19/Rt_data_za.csv")
-git_add(path, path_to_add = "covid-19/uk_utla.gif")
-git_commit(path, message)
-git_push(path)
+
+# get args
+args = commandArgs(trailingOnly = TRUE)
+
+# estimates
+valid_args = c("ca", "uk", "za", "world")
+
+# check args
+if (length(args) == 1) {
+  if (args[1] %in% valid_args) {
+    # copy data
+    file.copy(from = "../rt_estimates/estimating_r.html",
+              to = "covid-19/",
+              overwrite = TRUE)
+    file.copy(
+      from = paste0("../rt_estimates/estimating_r_", args[1], ".html"),
+      to = "covid-19/",
+      overwrite = TRUE
+    )
+    part <- ifelse(args[1] == "world", "", paste0("_", args[1]))
+    file.copy(
+      from = paste0("../rt_estimates/Rt_data", part, ".csv"),
+      to = "covid-19/",
+      overwrite = TRUE
+    )
+    git_add(path, path_to_add = "covid-19/estimating_r.html")
+    git_add(path, path_to_add = paste0("covid-19/estimating_r_", args[1],".html"))
+    git_add(path, path_to_add = paste0("covid-19/Rt_data", part, ".csv"))
+    if (args[1] == "uk") {
+      file.copy(from = "../rt_estimates/uk_utla.gif",
+                to = "covid-19/",
+                overwrite = TRUE)
+      git_add(path, path_to_add = "covid-19/uk_utla.gif")
+    }
+    message = paste0("Update estimating_r_",args[1]," on ", Sys.time())
+    git_commit(path, message)
+    git_push(path)
+  }
+}
