@@ -7,7 +7,7 @@ git_add <- function(path, path_to_add) {
                    "\" ",
                    "add ",
                    path_to_add)
-  system(command, show.output.on.console = TRUE)
+  system(command)
 }
 
 git_log <- function(path) {
@@ -17,7 +17,7 @@ git_log <- function(path) {
                    path,
                    "\" ",
                    "log")
-  system(command, show.output.on.console = TRUE)
+  system(command)
 }
 
 git_commit <- function(path, message) {
@@ -31,7 +31,7 @@ git_commit <- function(path, message) {
                    "\"",
                    message,
                    "\"")
-  system(command, show.output.on.console = TRUE)
+  system(command)
 }
 
 git_push <- function(path) {
@@ -41,7 +41,7 @@ git_push <- function(path) {
                    path,
                    "\" ",
                    "push")
-  system(command, show.output.on.console = TRUE)
+  system(command)
 }
 
 git_pull <- function(path) {
@@ -51,5 +51,5 @@ git_pull <- function(path) {
                    path,
                    "\" ",
                    "pull")
-  system(command, show.output.on.console = TRUE)
+  system(command)
 }
