@@ -44,6 +44,11 @@ if (length(args) == 1) {
                 to = "covid-19/",
                 overwrite = TRUE)
       git_add(path, path_to_add = "covid-19/uk_utla.gif")
+    } else if (args[1] == "za") {
+      file.copy(from = "../rt_estimates/za.gif",
+                to = "covid-19/",
+                overwrite = TRUE)
+      git_add(path, path_to_add = "covid-19/za.gif")
     }
     message = paste0("Update estimating_r_",args[1]," on ", Sys.time())
     git_commit(path, message)
