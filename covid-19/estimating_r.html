@@ -11,7 +11,7 @@
 
 <meta name="author" content="Louis Rossouw" />
 
-<meta name="date" content="2020-12-26" />
+<meta name="date" content="2020-12-27" />
 
 <title>Methodology for Estimating the Effective Reproductive Number of COVID-19</title>
 
@@ -1816,7 +1816,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Methodology for Estimating the Effective Reproductive Number of COVID-19</h1>
 <h4 class="author">Louis Rossouw</h4>
-<h4 class="date">2020-12-26</h4>
+<h4 class="date">2020-12-27</h4>
 
 </div>
 
@@ -1829,12 +1829,13 @@ div.tocify {
 <ul>
 <li><a href="https://lrossouw.github.io/covid-19/estimating_r_ca.html">Estimating the Effective Reproduction Number of COVID-19 in Canada</a>.</li>
 <li><a href="https://lrossouw.github.io/covid-19/estimating_r_za.html">Estimating the Effective Reproduction Number of COVID-19 in South Africa</a>.</li>
+<li><a href="https://lrossouw.github.io/covid-19/estimating_r_uk.html">Estimating the Effective Reproduction Number of COVID-19 in United Kingdom</a>.</li>
 <li><a href="https://lrossouw.github.io/covid-19/estimating_r_world.html">Estimating the Effective Reproduction Number of COVID-19 by Country</a>.</li>
 </ul>
 </div>
 <div id="updates" class="section level1">
 <h1><span class="header-section-number">2</span> Updates</h1>
-<p>As this paper is updated over time this section will summarise significant changes. The code producing this paper is tracked using Git. The Git commit hash for this project at the time of generating this paper was b2d1326344a351575a5aff7c5a16704dca3d8302.</p>
+<p>As this paper is updated over time this section will summarise significant changes. The code producing this paper is tracked using Git. The Git commit hash for this project at the time of generating this paper was b8c65eddb3eaf603e99a6bbbdc2ee61789fd1e1a.</p>
 <p><strong>2020-06-12</strong></p>
 <ul>
 <li>Initial version.</li>
@@ -1863,6 +1864,12 @@ div.tocify {
 <ul>
 <li>Switch from using a serial interval assumption to a generation interval assumption.</li>
 <li>Introduce uncertainty around this assumption.</li>
+</ul>
+<p><strong>2020-12-27</strong></p>
+<ul>
+<li>Updated graphics in all reports.</li>
+<li>Added risk quadrants.</li>
+<li>Switched to an overlapping sliding 7-day window for calculations (instead of distinct 7-day periods).</li>
 </ul>
 </div>
 <div id="method-assumptions" class="section level1">
@@ -1895,7 +1902,7 @@ div.tocify {
 </div>
 <div id="estimating-r_tm" class="section level1">
 <h1><span class="header-section-number">4</span> Estimating <span class="math inline">\(R_{t,m}\)</span></h1>
-<p>The analysis works backwards and fits <span class="math inline">\(R_{t,m}\)</span> values for whole weeks (ending on the last date in the data) using the <code>EpiEstim</code> package.</p>
+<p>The analysis works backwards and fits <span class="math inline">\(R_{t,m}\)</span> values 7-day periods (ending on the last date in the data) using the <code>EpiEstim</code> package, using an overlapping sliding window.</p>
 <p>So <span class="math inline">\(t\)</span> is based on the date of reporting (be that cases or deaths) and <span class="math inline">\(m\)</span> is the country or province. Two values are estimated for each country:</p>
 <ol style="list-style-type: decimal">
 <li><span class="math inline">\(R_{t,m}^{cases}\)</span> is the reproductive number implied by the cases reported at time <span class="math inline">\(t\)</span> in country <span class="math inline">\(m\)</span>.</li>
