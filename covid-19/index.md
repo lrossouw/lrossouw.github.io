@@ -19,6 +19,7 @@ These papers contain estimates for the reproductive number $R_{t} over time for 
 
 * [Methodology](estimating_r.html)
 * [South Africa](estimating_r_za.html)
+* [United Kingdom](estimating_r_uk.html)
 * [Canada](estimating_r_ca.html)
 * [World Countries](estimating_r_world.html)
 
