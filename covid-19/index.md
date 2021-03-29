@@ -1,6 +1,6 @@
 # COVID-19 Projects
 
-The following project...
+This page is focussed on projects relating to COVID-19.
 
 ## Modelling COVID-19 in South Africa & Canada at a Provincial Level
 
