@@ -23,4 +23,4 @@ These papers contain estimates for the reproductive number $R_{t} over time for 
 * [Canada](estimating_r_ca.html)
 * [World Countries](estimating_r_world.html)
 
-The above are updated multiple times per week.
+The above are updated daily.
