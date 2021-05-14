@@ -26,9 +26,21 @@ if (length(args) == 1) {
               to = "covid-19/",
               overwrite = TRUE)
     file.copy(
+      from = paste0("../rt_estimates/estimating_r_files"),
+      to = "covid-19/",
+      overwrite = TRUE,
+      recursive =  TRUE
+    )
+    file.copy(
       from = paste0("../rt_estimates/estimating_r_", args[1], ".html"),
       to = "covid-19/",
       overwrite = TRUE
+    )
+    file.copy(
+      from = paste0("../rt_estimates/estimating_r_", args[1], "_files"),
+      to = "covid-19/",
+      overwrite = TRUE,
+      recursive =  TRUE
     )
     part <- ifelse(args[1] == "world", "", paste0("_", args[1]))
     file.copy(
@@ -37,7 +49,9 @@ if (length(args) == 1) {
       overwrite = TRUE
     )
     git_add(path, path_to_add = "covid-19/estimating_r.html")
+    git_add(path, path_to_add = "covid-19/estimating_r_files")
     git_add(path, path_to_add = paste0("covid-19/estimating_r_", args[1],".html"))
+    git_add(path, path_to_add = paste0("covid-19/estimating_r_", args[1],"_files"))
     git_add(path, path_to_add = paste0("covid-19/Rt_data", part, ".csv"))
     if (args[1] == "uk") {
       file.copy(from = "../rt_estimates/uk_utla.gif",
