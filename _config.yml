@@ -1,6 +1,7 @@
 theme: jekyll-theme-minimal
 title: Louis Rossouw's GitHub Pages
-description: Moved to unsupervised.online.
+description: Please visit unsupervised.online.
 google_analytics: UA-167980662-1
+logo: logo.jpg
 plugins:
   - jekyll-sitemap

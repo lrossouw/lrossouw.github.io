@@ -1,3 +1,3 @@
-## Site Moved
+## Moved
 
-Please visit [Unsupervised](https://unsupervised.online/)
+Projects hosted here have been moved to [Unsupervised](https://unsupervised.online/).
