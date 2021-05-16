@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2021-05-16" />
+
+<title>Modelling COVID-19 in Canada at a Provincial Level</title>
+
+<script src="modelling_covid-19_in_canada_at_a_provincial_level_files/header-attrs-2.7/header-attrs.js"></script>
+<script src="modelling_covid-19_in_canada_at_a_provincial_level_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="modelling_covid-19_in_canada_at_a_provincial_level_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="modelling_covid-19_in_canada_at_a_provincial_level_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="modelling_covid-19_in_canada_at_a_provincial_level_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="modelling_covid-19_in_canada_at_a_provincial_level_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="modelling_covid-19_in_canada_at_a_provincial_level_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="modelling_covid-19_in_canada_at_a_provincial_level_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="modelling_covid-19_in_canada_at_a_provincial_level_files/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="modelling_covid-19_in_canada_at_a_provincial_level_files/navigation-1.1/tabsets.js"></script>
+<link href="modelling_covid-19_in_canada_at_a_provincial_level_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="modelling_covid-19_in_canada_at_a_provincial_level_files/highlightjs-9.12.0/highlight.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K7W2993RH4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-K7W2993RH4');
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Modelling COVID-19 in Canada at a Provincial Level</h1>
+<h4 class="date">2021-05-16</h4>
+
+</div>
+
+
+<div id="introduction" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> Introduction</h1>
+<p>This paper documents a model of the COVID-19 epidemic in Canada. Mobility data is used to model the reproduction number of the COVID-19 epidemic over time using a Bayesian hierarchical model. This is achieved by adapting the work by Imperial College London researchers <span class="citation">[1]</span> for Canada. Authors from Imperial College London have built similar models for Brazil <span class="citation">[2]</span> and the United States <span class="citation">[3]</span>. In this case the model is calibrated to reported COVID-19 deaths as compiled in <span class="citation">[4]</span>.</p>
+<p>The model uses mobility movement indexes by province produced by Google <span class="citation">[5]</span>. Furthermore the model includes an effect for mandatory indoor mask-wearing based on data as compiled in <span class="citation">[6]</span> (and extended).</p>
+<p>The model and report are automatically generated on a regular basis using R <span class="citation">[7]</span>. This version contains data available on 18 April 2021.</p>
+<p>An online, regularly updated version of this report is <a href="https://unsupervised.online/static/covid-19/modelling_covid-19_in_canada_at_a_provincial_level.html">available here</a>.</p>
+</div>
+<div id="updates" class="section level1" number="2">
+<h1 number="2"><span class="header-section-number">2</span> Updates</h1>
+<p>As this paper is updated over time this section will summarise significant changes. The code producing this paper is tracked using git. The git commit hash for this project at the time of generating this paper was 9b078146d4859bb36adf07a157434ab3b38a8702 and this change was made on 2021-05-16.</p>
+<p><strong>2020-11-01</strong></p>
+<ul>
+<li>First draft Canadian report.</li>
+</ul>
+<p><strong>2021-01-01</strong></p>
+<ul>
+<li>Correct initial R plots.</li>
+<li>Corrected parameter estimate plots. These charts were incorrectly adding country wide effects and provincial effects.</li>
+</ul>
+<p><strong>2021-01-24</strong></p>
+<ul>
+<li>Various updates to the report to bring in line with changes made in SA report.<br />
+</li>
+<li>Adding additional results on 30 June 2021.</li>
+<li>Add worst case projection.</li>
+</ul>
+<p><strong>2021-04-29</strong></p>
+<ul>
+<li>Update projection dates to 30 June and 30 September 2021.</li>
+</ul>
+</div>
+<div id="methodology" class="section level1" number="3">
+<h1 number="3"><span class="header-section-number">3</span> Methodology</h1>
+<p>A detailed description of the <a href="#detailed-assumptions-and-methodology">methodology and assumptions is provided below below</a>. The key features of the approach employed are summarised here:</p>
+<ul>
+<li>It uses a Bayesian Hierarchical Model to calibrate model parameters based on observed excess death data and prior assumptions.</li>
+<li>Changes in the reproduction number are linked to mobility data <span class="citation">[5]</span>, mandatory indoor mask-wearing, as well as an autoregressive term.</li>
+<li>The reproduction number over time is used to model the number of infections occurring over time.</li>
+<li>The model uses population-weighted infection fatality ratios (IFRs) by province with some noise added as well as assumptions about the time it takes to die to model deaths from infections.</li>
+<li>There is a single combined model for all provinces. This model shares information between provinces, but province-specific effects are also allowed.</li>
+<li>Provinces with less data have been grouped together.</li>
+<li>The model is fitted such that it uses the prior assumptions about various parameters as well as the reported death data in such a way to provide an updated parameter distribution and outcome distribution that reflect both the prior assumptions as well as the reported COVID-19 death data.</li>
+</ul>
+</div>
+<div id="mobility" class="section level1" number="4">
+<h1 number="4"><span class="header-section-number">4</span> Mobility</h1>
+<div id="national-mobility-data" class="section level2" number="4.1">
+<h2 number="4.1"><span class="header-section-number">4.1</span> National Mobility Data</h2>
+<p>The national mobility data from <span class="citation">[5]</span> is plotted below. The model uses the indexes at a provincial level but here the national indexes are plotted for convenience. Clear trends are observable.</p>
+<ul>
+<li>Mobility generally reduces from late March</li>
+<li>Residential mobility increases from late March.</li>
+<li>Park related mobility increases over the summer months.</li>
+<li>Other mobility generally increases after the initial decrease in March.</li>
+</ul>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_za_mobility-1.png" alt="Google Mobility Indexes for Canada" width="3840" />
+<p class="caption">
+Google Mobility Indexes for Canada
+</p>
+</div>
+<p>The chart below summarises the average mobility index used in the model. This is the average of mobility indicators excluding parks and residential. This follows <span class="citation">[8]</span>.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_average_mobility-1.png" alt="Average Mobility" width="3840" />
+<p class="caption">
+Average Mobility
+</p>
+</div>
+</div>
+<div id="provincial-mobility-data" class="section level2" number="4.2">
+<h2 number="4.2"><span class="header-section-number">4.2</span> Provincial Mobility Data</h2>
+<p>The average mobility (excluding residential &amp; park indexes) is plotted below for the various provinces. Grouped provinces uses mobility weighted by the population of provinces where there is mobility data available.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_average_mobility_province-1.png" alt="Average Mobility by Province" width="3840" />
+<p class="caption">
+Average Mobility by Province
+</p>
+</div>
+</div>
+</div>
+<div id="mandatory-indoor-mask-wearing" class="section level1" number="5">
+<h1 number="5"><span class="header-section-number">5</span> Mandatory Indoor Mask-Wearing</h1>
+<p>Mandatory mask-wearing mandates are compiled by province in <span class="citation">[6]</span>. This data contains a single indicator by province with 0 indicating no mandate and 1 indicating a province wide mandate. The authors also used numbers between 0 and 1 to indicate mandates that affected only subsets of the population.</p>
+<p>The grouped provinces use a weighted average (by population) of the mask-wearing indicator from the respective provinces.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_mask_wearing-1.png" alt="Mandatory Indoor Mask-Wearing by Province" width="3840" />
+<p class="caption">
+Mandatory Indoor Mask-Wearing by Province
+</p>
+</div>
+</div>
+<div id="calibration" class="section level1" number="6">
+<h1 number="6"><span class="header-section-number">6</span> Calibration</h1>
+<p>The sections below show how well the model is reproducing past data. Various panels are plotted for each province:</p>
+<ol style="list-style-type: decimal">
+<li>The first shows the daily count of deaths reported in the province (brown) and the estimated deaths in blue. This shows how well the model is calibrated to reported deaths.</li>
+<li>The second panel shows the modelled daily number of infections (blue) compared to confirmed case counts (brown) as reported for the province. Note that this model does not calibrate to case data, but this data is shown for reference. It is expected that the model would produce infections exceeding confirmed cases as testing is likely only finding a fraction of the true infections.</li>
+<li>The third panel shows the estimates for reproduction number (<span class="math inline">\(R_{t,m}\)</span>) over time (<span class="math inline">\(t\)</span>) for each province (<span class="math inline">\(m\)</span>). These values are generating the infections in the model which result in deaths. Note that due to the delay of deaths following infections the last week or two of <span class="math inline">\(R_{t,m}\)</span> values already present an extrapolation from the data. Deaths as a result of these recent infections have generally not occurred as yet.</li>
+<li>The final panel shows the estimated value of <span class="math inline">\(2\cdot\phi^{-1}(-\epsilon_{w_m(t),m}))\)</span>. This unexplained value converted to a factor of <span class="math inline">\(R_{t,m}\)</span>. A value greater than 1 indicates that the <span class="math inline">\(R_{t,m}\)</span> was higher than the value implied by other parameters. A value below 1 indicates the reverse.</li>
+</ol>
+<p>In all the charts the darker shaded area represents a confidence interval of 50% and the lighter shaded area represents a confidence interval of 95%.</p>
+<div id="alberta" class="section level2" number="6.1">
+<h2 number="6.1"><span class="header-section-number">6.1</span> Alberta</h2>
+<p>The reported deaths (in brown) and estimated deaths (in blue) are plotted below. The calibration appears reasonable.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_reported_deaths_ab-1.png" alt="Projected Deaths compared to Reported COVID-19 Deaths in Alberta" width="3840" />
+<p class="caption">
+Projected Deaths compared to Reported COVID-19 Deaths in Alberta
+</p>
+</div>
+<p>Below modelled infections are plotted compared to confirmed cases. Over the last 14 days it would appear that 212.2% of all new infections were tested.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_infections_ab-1.png" alt="Projected Infections compared to Confirmed Cases in Alberta" width="3840" />
+<p class="caption">
+Projected Infections compared to Confirmed Cases in Alberta
+</p>
+</div>
+<p>Below the <span class="math inline">\(R_{t,m}\)</span> is plotted.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_rt_ab-1.png" alt="Effective Reproduction Number in Alberta" width="3840" />
+<p class="caption">
+Effective Reproduction Number in Alberta
+</p>
+</div>
+<p>Below the <span class="math inline">\(2\cdot\phi^{-1}(-\epsilon_{w_m(t),m}))\)</span> is plotted.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_weekly_effect_ab-1.png" alt="Weekly AR(2) Factor Plot for Alberta" width="3840" />
+<p class="caption">
+Weekly AR(2) Factor Plot for Alberta
+</p>
+</div>
+</div>
+<div id="british-columbia" class="section level2" number="6.2">
+<h2 number="6.2"><span class="header-section-number">6.2</span> British Columbia</h2>
+<p>The reported deaths (in brown) and estimated deaths (in blue) are plotted below. The calibration appears reasonable.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_reported_deaths_bc-1.png" alt="Projected Deaths compared to Reported COVID-19 Deaths in British Columbia" width="3840" />
+<p class="caption">
+Projected Deaths compared to Reported COVID-19 Deaths in British Columbia
+</p>
+</div>
+<p>Below modelled infections are plotted compared to confirmed cases. Over the last 14 days it would appear that 107.3% of all new infections were tested.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_infections_bc-1.png" alt="Projected Infections compared to Confirmed Cases in British Columbia" width="3840" />
+<p class="caption">
+Projected Infections compared to Confirmed Cases in British Columbia
+</p>
+</div>
+<p>Below the <span class="math inline">\(R_{t,m}\)</span> is plotted.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_rt_bc-1.png" alt="Effective Reproduction Number in British Columbia" width="3840" />
+<p class="caption">
+Effective Reproduction Number in British Columbia
+</p>
+</div>
+<p>Below the <span class="math inline">\(2\cdot\phi^{-1}(-\epsilon_{w_m(t),m}))\)</span> is plotted.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_weekly_effect_bc-1.png" alt="Weekly AR(2) Factor Plot for British Columbia" width="3840" />
+<p class="caption">
+Weekly AR(2) Factor Plot for British Columbia
+</p>
+</div>
+</div>
+<div id="manitoba" class="section level2" number="6.3">
+<h2 number="6.3"><span class="header-section-number">6.3</span> Manitoba</h2>
+<p>The reported deaths (in brown) and estimated deaths (in blue) are plotted below. Reported deaths are still low but rising.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_reported_deaths_mb-1.png" alt="Projected Deaths compared to Reported COVID-19 Deaths in Manitoba" width="3840" />
+<p class="caption">
+Projected Deaths compared to Reported COVID-19 Deaths in Manitoba
+</p>
+</div>
+<p>Below modelled infections are plotted compared to confirmed cases. Over the last 14 days it would appear that 45.3% of all new infections were tested.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_infections_mb-1.png" alt="Projected Infections compared to Confirmed Cases in Manitoba" width="3840" />
+<p class="caption">
+Projected Infections compared to Confirmed Cases in Manitoba
+</p>
+</div>
+<p>Below the <span class="math inline">\(R_{t,m}\)</span> is plotted.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_rt_mb-1.png" alt="Effective Reproduction Number in Manitoba" width="3840" />
+<p class="caption">
+Effective Reproduction Number in Manitoba
+</p>
+</div>
+<p>Below the <span class="math inline">\(2\cdot\phi^{-1}(-\epsilon_{w_m(t),m}))\)</span> is plotted.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_weekly_effect_mb-1.png" alt="Weekly AR(2) Factor Plot for Manitoba" width="3840" />
+<p class="caption">
+Weekly AR(2) Factor Plot for Manitoba
+</p>
+</div>
+</div>
+<div id="maritime-provinces" class="section level2" number="6.4">
+<h2 number="6.4"><span class="header-section-number">6.4</span> Maritime Provinces</h2>
+<p>The reported deaths (in brown) and estimated deaths (in blue) are plotted below. There are limited recently reported deaths.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_reported_deaths_ns-1.png" alt="Projected Deaths compared to Reported COVID-19 Deaths in Ontario" width="3840" />
+<p class="caption">
+Projected Deaths compared to Reported COVID-19 Deaths in Ontario
+</p>
+</div>
+<p>Below modelled infections are plotted compared to confirmed cases. Over the last 14 days it would appear that 16.1% of all new infections were tested.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_infections_ns-1.png" alt="Projected Infections compared to Confirmed Cases in Maritime Provinces" width="3840" />
+<p class="caption">
+Projected Infections compared to Confirmed Cases in Maritime Provinces
+</p>
+</div>
+<p>Below the <span class="math inline">\(R_{t,m}\)</span> is plotted.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_rt_ns-1.png" alt="Effective Reproduction Number in Maritime Provinces" width="3840" />
+<p class="caption">
+Effective Reproduction Number in Maritime Provinces
+</p>
+</div>
+<p>Below the <span class="math inline">\(2\cdot\phi^{-1}(-\epsilon_{w_m(t),m}))\)</span> is plotted.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_weekly_effect_ns-1.png" alt="Weekly AR(2) Factor Plot for Maritime Provinces" width="3840" />
+<p class="caption">
+Weekly AR(2) Factor Plot for Maritime Provinces
+</p>
+</div>
+</div>
+<div id="ontario" class="section level2" number="6.5">
+<h2 number="6.5"><span class="header-section-number">6.5</span> Ontario</h2>
+<p>The reported deaths (in brown) and estimated deaths (in blue) are plotted below. The calibration appears reasonable.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_reported_deaths_on-1.png" alt="Projected Deaths compared to Reported COVID-19 Deaths in Ontario" width="3840" />
+<p class="caption">
+Projected Deaths compared to Reported COVID-19 Deaths in Ontario
+</p>
+</div>
+<p>Below modelled infections are plotted compared to confirmed cases. Over the last 14 days it would appear that 99.4% of all new infections were tested.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_infections_on-1.png" alt="Projected Infections compared to Confirmed Cases in Ontario" width="3840" />
+<p class="caption">
+Projected Infections compared to Confirmed Cases in Ontario
+</p>
+</div>
+<p>Below the <span class="math inline">\(R_{t,m}\)</span> is plotted.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_rt_on-1.png" alt="Effective Reproduction Number in Ontario" width="3840" />
+<p class="caption">
+Effective Reproduction Number in Ontario
+</p>
+</div>
+<p>Below the <span class="math inline">\(2\cdot\phi^{-1}(-\epsilon_{w_m(t),m}))\)</span> is plotted.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_weekly_effect_on-1.png" alt="Weekly AR(2) Factor Plot for Ontario" width="3840" />
+<p class="caption">
+Weekly AR(2) Factor Plot for Ontario
+</p>
+</div>
+</div>
+<div id="quebec" class="section level2" number="6.6">
+<h2 number="6.6"><span class="header-section-number">6.6</span> Quebec</h2>
+<p>The reported deaths (in brown) and estimated deaths (in blue) are plotted below. The calibration appears reasonable.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_reported_deaths_qc-1.png" alt="Projected Deaths compared to Reported COVID-19 Deaths in Quebec" width="3840" />
+<p class="caption">
+Projected Deaths compared to Reported COVID-19 Deaths in Quebec
+</p>
+</div>
+<p>Below modelled infections are plotted compared to confirmed cases. Over the last 14 days it would appear that 101.2% of all new infections were tested.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_infections_qc-1.png" alt="Projected Infections compared to Confirmed Cases in Quebec" width="3840" />
+<p class="caption">
+Projected Infections compared to Confirmed Cases in Quebec
+</p>
+</div>
+<p>Below the <span class="math inline">\(R_{t,m}\)</span> is plotted.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_rt_qc-1.png" alt="Effective Reproduction Number in Quebec" width="3840" />
+<p class="caption">
+Effective Reproduction Number in Quebec
+</p>
+</div>
+<p>Below the <span class="math inline">\(2\cdot\phi^{-1}(-\epsilon_{w_m(t),m}))\)</span> is plotted.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_weekly_effect_qc-1.png" alt="Weekly AR(2) Factor Plot for Quebec" width="3840" />
+<p class="caption">
+Weekly AR(2) Factor Plot for Quebec
+</p>
+</div>
+</div>
+<div id="saskatchewan" class="section level2" number="6.7">
+<h2 number="6.7"><span class="header-section-number">6.7</span> Saskatchewan</h2>
+<p>The reported deaths (in brown) and estimated deaths (in blue) are plotted below. There are somewhat limited reported deaths for this province.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_reported_deaths_oth-1.png" alt="Projected Deaths compared to Reported COVID-19 Deaths in Saskatchewan" width="3840" />
+<p class="caption">
+Projected Deaths compared to Reported COVID-19 Deaths in Saskatchewan
+</p>
+</div>
+<p>Below modelled infections are plotted compared to confirmed cases. Over the last 14 days it would appear that 67.4% of all new infections were tested.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_infections_oth-1.png" alt="Projected Infections compared to Confirmed Cases in Saskatchewan" width="3840" />
+<p class="caption">
+Projected Infections compared to Confirmed Cases in Saskatchewan
+</p>
+</div>
+<p>Below the <span class="math inline">\(R_{t,m}\)</span> is plotted.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_rt_oth-1.png" alt="Effective Reproduction Number in Saskatchewan" width="3840" />
+<p class="caption">
+Effective Reproduction Number in Saskatchewan
+</p>
+</div>
+<p>Below the <span class="math inline">\(2\cdot\phi^{-1}(-\epsilon_{w_m(t),m}))\)</span> is plotted.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_weekly_effect_oth-1.png" alt="Weekly AR(2) Factor Plot for Saskatchewan" width="3840" />
+<p class="caption">
+Weekly AR(2) Factor Plot for Saskatchewan
+</p>
+</div>
+</div>
+</div>
+<div id="parameter-estimates" class="section level1" number="7">
+<h1 number="7"><span class="header-section-number">7</span> Parameter Estimates</h1>
+<p>To understand the net parameter estimates for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\alpha_{m}^s\)</span> and their impact on <span class="math inline">\(R_{t,m}\)</span> the percentage reduction in <span class="math inline">\(R_{t,m}\)</span> is plotted below. The plot is made assuming the particular index is 1 (representing a 100% reduction in average mobility).</p>
+<p>This is equivalent to plotting <span class="math inline">\(1-2\cdot\phi^{-1}(-(\alpha+\alpha_{m}^s))\)</span> for a particular province <span class="math inline">\(m\)</span>. <span class="math inline">\(1-2\cdot\phi^{-1}(-(\beta+\beta_{m}^s))\)</span> is also plotted.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_parameter_estimates-1.png" alt="Model Parameter Estimates with 95% Confidence Intervals" width="3840" />
+<p class="caption">
+Model Parameter Estimates with 95% Confidence Intervals
+</p>
+</div>
+</div>
+<div id="reproduction-number-estimates" class="section level1" number="8">
+<h1 number="8"><span class="header-section-number">8</span> Reproduction Number Estimates</h1>
+<div id="initial-reproduction-number" class="section level2" number="8.1">
+<h2 number="8.1"><span class="header-section-number">8.1</span> Initial Reproduction Number</h2>
+<p>Estimates for <span class="math inline">\(R_{0,m}\)</span> for each province are plotted below.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_initial_reproduction_number-1.png" alt="Initial Reproduction Number by Province" width="2100" />
+<p class="caption">
+Initial Reproduction Number by Province
+</p>
+</div>
+</div>
+<div id="current-reproduction-number-as-at-18-april-2021" class="section level2" number="8.2">
+<h2 number="8.2"><span class="header-section-number">8.2</span> Current Reproduction Number as at 18 April 2021</h2>
+<p>Current estimates and 95% confidence intervals for <span class="math inline">\(R_{t,m}\)</span> (current effective reproduction number) are plotted below for each province. A value below 1 would indicate an epidemic that is slowing while a value above 1 indicates an epidemic that is growing. It is clear that the spread of the epidemic is somewhat slowed compared to the initial <span class="math inline">\(R_{0,m}\)</span>. For some provinces the confidence interval does not include 1 which would indicate this to a stronger degree.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_current_reproduction_number-1.png" alt="Current Reproduction Number by Province" width="2100" />
+<p class="caption">
+Current Reproduction Number by Province
+</p>
+</div>
+</div>
+</div>
+<div id="attack-rate-and-cumulative-deaths-as-at-18-april-2021" class="section level1" number="9">
+<h1 number="9"><span class="header-section-number">9</span> Attack Rate and Cumulative Deaths as at 18 April 2021</h1>
+<p>The estimated attack rate and cumulative deaths (with 95% confidence intervals) are tabulated below (as at 18 April 2021).</p>
+<p>The attack rate is the proportion of the population infected to date. This figure has to be estimated, because many that are infected experience no or mild symptoms, thus they may not seek medical advice and hence will never be tested.</p>
+<p>The confidence intervals for these estimates remain wide.</p>
+<table>
+<caption>Current Attack Rate and Cumulative Deaths by Province</caption>
+<thead>
+<tr class="header">
+<th align="left">Province</th>
+<th align="left">Attack Rate</th>
+<th align="left">Cumulative Deaths</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alberta</td>
+<td align="left">10.5% [5.4%-63.3%]</td>
+<td align="left">3 184 [ 1 870 - 21 095]</td>
+</tr>
+<tr class="even">
+<td align="left">British Columbia</td>
+<td align="left">3.4% [2.6%-4.9%]</td>
+<td align="left">1 662 [ 1 399 - 2 295]</td>
+</tr>
+<tr class="odd">
+<td align="left">Manitoba</td>
+<td align="left">11.1% [6.7%-60.9%]</td>
+<td align="left">1 057 [ 838 - 3 067]</td>
+</tr>
+<tr class="even">
+<td align="left">Maritime Provinces</td>
+<td align="left">14.0% [0.3%-85.4%]</td>
+<td align="left">563 [ 77 - 10 975]</td>
+</tr>
+<tr class="odd">
+<td align="left">Ontario</td>
+<td align="left">6.5% [4.7%-14.0%]</td>
+<td align="left">8 016 [ 7 117 - 9 739]</td>
+</tr>
+<tr class="even">
+<td align="left">Quebec</td>
+<td align="left">25.8% [10.5%-92.6%]</td>
+<td align="left">16 574 [10 044 - 99 489]</td>
+</tr>
+<tr class="odd">
+<td align="left">Saskatchewan</td>
+<td align="left">5.7% [3.7%-9.7%]</td>
+<td align="left">534 [ 393 - 769]</td>
+</tr>
+<tr class="even">
+<td align="left">Canada</td>
+<td align="left">11.5% [6.2%-38.5%]</td>
+<td align="left">31 589 [22 716 - 146 602]</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="projections" class="section level1" number="10">
+<h1 number="10"><span class="header-section-number">10</span> Projections</h1>
+<p>One of the reasons we build models is so that we can make sense of the future or indeed the past. We can project forward models to assess the impact of varying assumptions on future outcomes. This gives us a sense of how changes in actions may impact the future. I.e. it allows us to answer “what if” questions. Note however that in projecting the future we are extrapolating, and due care needs to be taken. There are numerous limitations to this model and these projections <a href="#limitations">dicussed below</a> but the author is also of the opinion that the projections add value in that they indicate a significant range across the scenarios projected and in such a manner inform discussion.</p>
+<blockquote>
+<p>All models are wrong but some are useful - George Box <span class="citation">[9]</span></p>
+</blockquote>
+<p>An incorrect model can be useful because it enables a better understanding of the model and the phenomena being modelled.</p>
+<p>Note detailed projection output can be <a href="projections-mob-base-canada_v2-150-daily-20210418.csv">found here</a>.</p>
+<p>Projections are done using constant, increasing and decreasing mobility but other interventions are left constant. It should also be noted that the <span class="math inline">\(\epsilon_{w_m(t),m}\)</span> are projected forward at constant levels and are not adjusted for projection purposes.</p>
+<p>The <span class="math inline">\(\epsilon_{w_m(t),m}\)</span> is held at “current” levels when projecting forwards. It should be noted that these levels are set 28 days prior as recent deaths only affect infections that occured prior to that. Based on the observed calibration for Western Cape there is a possibility that this may be resulting in too low recent infections.</p>
+<div id="no-change-in-mobility" class="section level2" number="10.1">
+<h2 number="10.1"><span class="header-section-number">10.1</span> No change in Mobility</h2>
+<p>In this projection mobility is held constant at current levels. Mask wearing interventions are left intact.</p>
+<p>The result of this scenario as at 30 June 2021 and 30 September 2021 are tabulated below.</p>
+<table>
+<caption>Projection to 30 June 2020 with no change in mobility</caption>
+<thead>
+<tr class="header">
+<th align="left">Province</th>
+<th align="left">Attack Rate</th>
+<th align="left">Deaths</th>
+<th align="left">Peak Daily Deaths</th>
+<th align="left">Peak Date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alberta</td>
+<td align="left">17.5% [5.9%-71.1%]</td>
+<td align="left">4 456 [ 2 031- 21 686]</td>
+<td align="left">51</td>
+<td align="left">2021-07-24</td>
+</tr>
+<tr class="even">
+<td align="left">British Columbia</td>
+<td align="left">9.2% [2.8%-43.0%]</td>
+<td align="left">3 651 [ 1 537- 21 332]</td>
+<td align="left">76</td>
+<td align="left">2021-08-02</td>
+</tr>
+<tr class="odd">
+<td align="left">Manitoba</td>
+<td align="left">17.5% [6.9%-73.4%]</td>
+<td align="left">1 535 [ 892- 5 020]</td>
+<td align="left">14</td>
+<td align="left">2020-12-10</td>
+</tr>
+<tr class="even">
+<td align="left">Maritime Provinces</td>
+<td align="left">17.4% [0.3%-85.5%]</td>
+<td align="left">920 [ 80- 11 936]</td>
+<td align="left">35</td>
+<td align="left">2021-08-21</td>
+</tr>
+<tr class="odd">
+<td align="left">Ontario</td>
+<td align="left">14.7% [5.1%-50.2%]</td>
+<td align="left">15 069 [ 8 011- 46 635]</td>
+<td align="left">235</td>
+<td align="left">2021-07-18</td>
+</tr>
+<tr class="even">
+<td align="left">Quebec</td>
+<td align="left">34.5% [11.4%-92.7%]</td>
+<td align="left">20 719 [10 679- 99 714]</td>
+<td align="left">313</td>
+<td align="left">2020-04-19</td>
+</tr>
+<tr class="odd">
+<td align="left">Saskatchewan</td>
+<td align="left">14.0% [4.0%-62.4%]</td>
+<td align="left">1 094 [ 449- 4 109]</td>
+<td align="left">15</td>
+<td align="left">2021-07-07</td>
+</tr>
+<tr class="even">
+<td align="left">Canada</td>
+<td align="left">19.0% [7.9%-42.9%]</td>
+<td align="left">47 444 [26 864-149 669]</td>
+<td align="left">584</td>
+<td align="left">2021-07-21</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>Projection to 30 September 2021 with no change in mobility</caption>
+<thead>
+<tr class="header">
+<th align="left">Province</th>
+<th align="left">Attack Rate</th>
+<th align="left">Deaths</th>
+<th align="left">Peak Daily Deaths</th>
+<th align="left">Peak Date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alberta</td>
+<td align="left">27.6% [6.0%-71.3%]</td>
+<td align="left">8 347 [ 2 062- 23 959]</td>
+<td align="left">51</td>
+<td align="left">2021-07-24</td>
+</tr>
+<tr class="even">
+<td align="left">British Columbia</td>
+<td align="left">19.6% [2.8%-61.6%]</td>
+<td align="left">9 844 [ 1 545- 37 851]</td>
+<td align="left">76</td>
+<td align="left">2021-08-02</td>
+</tr>
+<tr class="odd">
+<td align="left">Manitoba</td>
+<td align="left">24.6% [6.9%-75.0%]</td>
+<td align="left">2 557 [ 897- 8 320]</td>
+<td align="left">14</td>
+<td align="left">2020-12-10</td>
+</tr>
+<tr class="even">
+<td align="left">Maritime Provinces</td>
+<td align="left">27.7% [0.3%-85.5%]</td>
+<td align="left">3 760 [ 81- 20 616]</td>
+<td align="left">35</td>
+<td align="left">2021-08-21</td>
+</tr>
+<tr class="odd">
+<td align="left">Ontario</td>
+<td align="left">24.5% [5.1%-62.8%]</td>
+<td align="left">32 220 [ 8 033- 88 772]</td>
+<td align="left">235</td>
+<td align="left">2021-07-18</td>
+</tr>
+<tr class="even">
+<td align="left">Quebec</td>
+<td align="left">45.3% [11.8%-93.0%]</td>
+<td align="left">32 645 [10 984- 99 832]</td>
+<td align="left">313</td>
+<td align="left">2020-04-19</td>
+</tr>
+<tr class="odd">
+<td align="left">Saskatchewan</td>
+<td align="left">20.9% [4.0%-68.0%]</td>
+<td align="left">2 058 [ 452- 6 819]</td>
+<td align="left">15</td>
+<td align="left">2021-07-07</td>
+</tr>
+<tr class="even">
+<td align="left">Canada</td>
+<td align="left">29.0% [11.0%-50.4%]</td>
+<td align="left">91 430 [33 793-184 028]</td>
+<td align="left">584</td>
+<td align="left">2021-07-21</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="increase-in-mobility" class="section level2" number="10.2">
+<h2 number="10.2"><span class="header-section-number">10.2</span> Increase in mobility</h2>
+<p>This scenario assumes future mobility half-way between current mobility levels and normal levels. Other interventions are left intact. The attack rate and deaths after increasing mobility are tabulated below (as at 30 June 2021 and 30 September 2021).</p>
+<table>
+<caption>Projection to 30 June 2021 with increase in mobility</caption>
+<thead>
+<tr class="header">
+<th align="left">Province</th>
+<th align="left">Attack Rate</th>
+<th align="left">Deaths</th>
+<th align="left">Peak Daily Deaths</th>
+<th align="left">Peak Date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alberta</td>
+<td align="left">29.4% [6.0%-77.9%]</td>
+<td align="left">6 253 [ 2 051- 22 526]</td>
+<td align="left">141</td>
+<td align="left">2021-07-13</td>
+</tr>
+<tr class="even">
+<td align="left">British Columbia</td>
+<td align="left">16.3% [2.9%-64.3%]</td>
+<td align="left">5 106 [ 1 549- 22 958]</td>
+<td align="left">174</td>
+<td align="left">2021-07-22</td>
+</tr>
+<tr class="odd">
+<td align="left">Manitoba</td>
+<td align="left">19.4% [6.9%-75.0%]</td>
+<td align="left">1 641 [ 900- 5 496]</td>
+<td align="left">19</td>
+<td align="left">2021-07-20</td>
+</tr>
+<tr class="even">
+<td align="left">Maritime Provinces</td>
+<td align="left">18.5% [0.3%-85.5%]</td>
+<td align="left">1 027 [ 80- 12 530]</td>
+<td align="left">47</td>
+<td align="left">2021-08-11</td>
+</tr>
+<tr class="odd">
+<td align="left">Ontario</td>
+<td align="left">41.2% [5.4%-83.6%]</td>
+<td align="left">36 025 [ 8 201-101 817]</td>
+<td align="left">1 013</td>
+<td align="left">2021-07-01</td>
+</tr>
+<tr class="even">
+<td align="left">Quebec</td>
+<td align="left">45.0% [12.2%-92.7%]</td>
+<td align="left">25 350 [10 986- 99 716]</td>
+<td align="left">368</td>
+<td align="left">2021-07-10</td>
+</tr>
+<tr class="odd">
+<td align="left">Saskatchewan</td>
+<td align="left">17.8% [4.0%-68.4%]</td>
+<td align="left">1 291 [ 455- 4 795]</td>
+<td align="left">23</td>
+<td align="left">2021-07-11</td>
+</tr>
+<tr class="even">
+<td align="left">Canada</td>
+<td align="left">34.3% [14.0%-56.7%]</td>
+<td align="left">76 694 [29 333-163 747]</td>
+<td align="left">1 725</td>
+<td align="left">2021-07-06</td>
+</tr>
+</tbody>
+</table>
+<p>Based on the above an increase mobility could mean roughly 29 000 more deaths by end of June 2021.</p>
+<table>
+<caption>Projection to 30 September 2021 with increase in mobility</caption>
+<thead>
+<tr class="header">
+<th align="left">Province</th>
+<th align="left">Attack Rate</th>
+<th align="left">Deaths</th>
+<th align="left">Peak Daily Deaths</th>
+<th align="left">Peak Date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alberta</td>
+<td align="left">46.9% [6.2%-80.9%]</td>
+<td align="left">14 634 [ 2 083- 27 648]</td>
+<td align="left">141</td>
+<td align="left">2021-07-13</td>
+</tr>
+<tr class="even">
+<td align="left">British Columbia</td>
+<td align="left">34.3% [2.9%-72.9%]</td>
+<td align="left">17 211 [ 1 553- 39 602]</td>
+<td align="left">174</td>
+<td align="left">2021-07-22</td>
+</tr>
+<tr class="odd">
+<td align="left">Manitoba</td>
+<td align="left">29.5% [7.0%-76.8%]</td>
+<td align="left">3 089 [ 910- 8 716]</td>
+<td align="left">19</td>
+<td align="left">2021-07-20</td>
+</tr>
+<tr class="even">
+<td align="left">Maritime Provinces</td>
+<td align="left">31.5% [0.3%-86.1%]</td>
+<td align="left">4 723 [ 81- 21 464]</td>
+<td align="left">47</td>
+<td align="left">2021-08-11</td>
+</tr>
+<tr class="odd">
+<td align="left">Ontario</td>
+<td align="left">57.2% [5.4%-84.4%]</td>
+<td align="left">79 067 [ 8 279-131 367]</td>
+<td align="left">1 013</td>
+<td align="left">2021-07-01</td>
+</tr>
+<tr class="even">
+<td align="left">Quebec</td>
+<td align="left">61.1% [14.2%-93.1%]</td>
+<td align="left">46 735 [11 264- 99 843]</td>
+<td align="left">368</td>
+<td align="left">2021-07-10</td>
+</tr>
+<tr class="odd">
+<td align="left">Saskatchewan</td>
+<td align="left">29.1% [4.0%-72.0%]</td>
+<td align="left">2 865 [ 457- 7 369]</td>
+<td align="left">23</td>
+<td align="left">2021-07-11</td>
+</tr>
+<tr class="even">
+<td align="left">Canada</td>
+<td align="left">50.2% [30.0%-68.3%]</td>
+<td align="left">168 324 [50 578-251 830]</td>
+<td align="left">1 725</td>
+<td align="left">2021-07-06</td>
+</tr>
+</tbody>
+</table>
+<p>Based on the above an increase mobility could mean roughly 77 000 more deaths by the end of September 2021.</p>
+</div>
+<div id="decreased-mobility" class="section level2" number="10.3">
+<h2 number="10.3"><span class="header-section-number">10.3</span> Decreased mobility</h2>
+<p>This scenario assumes future mobility is decreased by 50% more than currently. The attack rate and deaths after decreased mobility are tabulated below (as at 30 June 2021 and 30 September 2021).</p>
+<table>
+<caption>Projection to 30 June 2021 with decrease in mobility</caption>
+<thead>
+<tr class="header">
+<th align="left">Province</th>
+<th align="left">Attack Rate</th>
+<th align="left">Deaths</th>
+<th align="left">Peak Daily Deaths</th>
+<th align="left">Peak Date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alberta</td>
+<td align="left">14.0% [5.6%-71.1%]</td>
+<td align="left">3 944 [ 2 011- 21 635]</td>
+<td align="left">30</td>
+<td align="left">2021-01-02</td>
+</tr>
+<tr class="even">
+<td align="left">British Columbia</td>
+<td align="left">6.8% [2.7%-35.1%]</td>
+<td align="left">3 148 [ 1 523- 20 674]</td>
+<td align="left">37</td>
+<td align="left">2021-07-13</td>
+</tr>
+<tr class="odd">
+<td align="left">Manitoba</td>
+<td align="left">16.3% [6.9%-70.3%]</td>
+<td align="left">1 461 [ 888- 4 685]</td>
+<td align="left">14</td>
+<td align="left">2020-12-10</td>
+</tr>
+<tr class="even">
+<td align="left">Maritime Provinces</td>
+<td align="left">16.6% [0.3%-85.5%]</td>
+<td align="left">837 [ 80- 11 891]</td>
+<td align="left">25</td>
+<td align="left">2021-08-30</td>
+</tr>
+<tr class="odd">
+<td align="left">Ontario</td>
+<td align="left">8.9% [4.9%-26.5%]</td>
+<td align="left">10 846 [ 7 770- 26 400]</td>
+<td align="left">56</td>
+<td align="left">2021-01-14</td>
+</tr>
+<tr class="even">
+<td align="left">Quebec</td>
+<td align="left">29.9% [10.8%-92.7%]</td>
+<td align="left">18 817 [10 569- 99 710]</td>
+<td align="left">313</td>
+<td align="left">2020-04-19</td>
+</tr>
+<tr class="odd">
+<td align="left">Saskatchewan</td>
+<td align="left">11.9% [3.9%-60.8%]</td>
+<td align="left">977 [ 440- 3 773]</td>
+<td align="left">10</td>
+<td align="left">2021-07-03</td>
+</tr>
+<tr class="even">
+<td align="left">Canada</td>
+<td align="left">14.8% [6.9%-41.7%]</td>
+<td align="left">40 031 [25 287-148 431]</td>
+<td align="left">368</td>
+<td align="left">2020-04-20</td>
+</tr>
+</tbody>
+</table>
+<p>Based on the above a decrease in mobility could mean roughly 7 000 fewer deaths by end of June 2021.</p>
+<table>
+<caption>Projection to 30 September 2021 with decrease in mobility</caption>
+<thead>
+<tr class="header">
+<th align="left">Province</th>
+<th align="left">Attack Rate</th>
+<th align="left">Deaths</th>
+<th align="left">Peak Daily Deaths</th>
+<th align="left">Peak Date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alberta</td>
+<td align="left">17.3% [5.6%-71.3%]</td>
+<td align="left">5 332 [ 2 016- 23 236]</td>
+<td align="left">30</td>
+<td align="left">2021-01-02</td>
+</tr>
+<tr class="even">
+<td align="left">British Columbia</td>
+<td align="left">10.9% [2.7%-51.9%]</td>
+<td align="left">5 918 [ 1 526- 39 427]</td>
+<td align="left">37</td>
+<td align="left">2021-07-13</td>
+</tr>
+<tr class="odd">
+<td align="left">Manitoba</td>
+<td align="left">21.3% [6.9%-72.4%]</td>
+<td align="left">2 218 [ 891- 8 102]</td>
+<td align="left">14</td>
+<td align="left">2020-12-10</td>
+</tr>
+<tr class="even">
+<td align="left">Maritime Provinces</td>
+<td align="left">24.4% [0.3%-85.5%]</td>
+<td align="left">2 954 [ 81- 19 963]</td>
+<td align="left">25</td>
+<td align="left">2021-08-30</td>
+</tr>
+<tr class="odd">
+<td align="left">Ontario</td>
+<td align="left">11.1% [5.0%-47.7%]</td>
+<td align="left">14 800 [ 7 774- 63 604]</td>
+<td align="left">56</td>
+<td align="left">2021-01-14</td>
+</tr>
+<tr class="even">
+<td align="left">Quebec</td>
+<td align="left">34.2% [10.9%-92.9%]</td>
+<td align="left">23 554 [10 617- 99 820]</td>
+<td align="left">313</td>
+<td align="left">2020-04-19</td>
+</tr>
+<tr class="odd">
+<td align="left">Saskatchewan</td>
+<td align="left">16.1% [3.9%-64.6%]</td>
+<td align="left">1 596 [ 441- 6 541]</td>
+<td align="left">10</td>
+<td align="left">2021-07-03</td>
+</tr>
+<tr class="even">
+<td align="left">Canada</td>
+<td align="left">18.4% [7.2%-45.2%]</td>
+<td align="left">56 372 [26 385-155 250]</td>
+<td align="left">368</td>
+<td align="left">2020-04-20</td>
+</tr>
+</tbody>
+</table>
+<p>Based on the above a decrease in mobility could mean roughly 35 000 fewer deaths by the end of September 2021.</p>
+</div>
+<div id="worst-case-scenario" class="section level2" number="10.4">
+<h2 number="10.4"><span class="header-section-number">10.4</span> Worst Case Scenario</h2>
+<p>This scenario assumes future mobility returns to normal, mask wearing is eliminated as well as that the AR(2) term reverts to 0. The attack rate and deaths are tabulated below (as at 30 June 2021 and 30 September 2021). This would be a relatively extreme worst case scenario as this essentially assumes not mitigation measures in place and would probably be close to the absolute worst case.</p>
+<table>
+<caption>Projection to 30 June 2021 - Worst Case</caption>
+<thead>
+<tr class="header">
+<th align="left">Province</th>
+<th align="left">Attack Rate</th>
+<th align="left">Deaths</th>
+<th align="left">Peak Daily Deaths</th>
+<th align="left">Peak Date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alberta</td>
+<td align="left">60.9% [6.3%-96.7%]</td>
+<td align="left">14 455 [ 2 072- 32 215]</td>
+<td align="left">356</td>
+<td align="left">2021-06-19</td>
+</tr>
+<tr class="even">
+<td align="left">British Columbia</td>
+<td align="left">27.8% [2.9%-82.7%]</td>
+<td align="left">8 210 [ 1 551- 30 557]</td>
+<td align="left">292</td>
+<td align="left">2021-07-09</td>
+</tr>
+<tr class="odd">
+<td align="left">Manitoba</td>
+<td align="left">26.1% [7.2%-77.6%]</td>
+<td align="left">1 977 [ 913- 6 496]</td>
+<td align="left">39</td>
+<td align="left">2021-07-16</td>
+</tr>
+<tr class="even">
+<td align="left">Maritime Provinces</td>
+<td align="left">28.1% [0.3%-90.7%]</td>
+<td align="left">2 113 [ 80- 15 109]</td>
+<td align="left">107</td>
+<td align="left">2021-07-21</td>
+</tr>
+<tr class="odd">
+<td align="left">Ontario</td>
+<td align="left">79.2% [5.2%-99.1%]</td>
+<td align="left">99 696 [ 8 191-155 953]</td>
+<td align="left">2 760</td>
+<td align="left">2021-06-06</td>
+</tr>
+<tr class="even">
+<td align="left">Quebec</td>
+<td align="left">79.8% [23.6%-97.6%]</td>
+<td align="left">51 798 [11 202-100 282]</td>
+<td align="left">1 086</td>
+<td align="left">2021-06-17</td>
+</tr>
+<tr class="odd">
+<td align="left">Saskatchewan</td>
+<td align="left">23.7% [4.0%-73.8%]</td>
+<td align="left">1 609 [ 458- 5 879]</td>
+<td align="left">37</td>
+<td align="left">2021-07-09</td>
+</tr>
+<tr class="even">
+<td align="left">Canada</td>
+<td align="left">63.3% [27.8%-83.3%]</td>
+<td align="left">179 859 [29 320-271 545]</td>
+<td align="left">4 210</td>
+<td align="left">2021-06-10</td>
+</tr>
+</tbody>
+</table>
+<p>Based on the above the worst case scenario could result in roughly 132 000 more deaths by the end of June 2021.</p>
+<table>
+<caption>Projection to 30 September 2021 - Worst Case</caption>
+<thead>
+<tr class="header">
+<th align="left">Province</th>
+<th align="left">Attack Rate</th>
+<th align="left">Deaths</th>
+<th align="left">Peak Daily Deaths</th>
+<th align="left">Peak Date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alberta</td>
+<td align="left">70.4% [6.4%-96.7%]</td>
+<td align="left">22 747 [ 2 095- 34 637]</td>
+<td align="left">356</td>
+<td align="left">2021-06-19</td>
+</tr>
+<tr class="even">
+<td align="left">British Columbia</td>
+<td align="left">47.2% [3.0%-84.5%]</td>
+<td align="left">24 223 [ 1 561- 47 164]</td>
+<td align="left">292</td>
+<td align="left">2021-07-09</td>
+</tr>
+<tr class="odd">
+<td align="left">Manitoba</td>
+<td align="left">41.7% [7.3%-80.4%]</td>
+<td align="left">4 512 [ 926- 9 836]</td>
+<td align="left">39</td>
+<td align="left">2021-07-16</td>
+</tr>
+<tr class="even">
+<td align="left">Maritime Provinces</td>
+<td align="left">48.4% [0.3%-91.5%]</td>
+<td align="left">9 332 [ 80- 26 335]</td>
+<td align="left">107</td>
+<td align="left">2021-07-21</td>
+</tr>
+<tr class="odd">
+<td align="left">Ontario</td>
+<td align="left">81.3% [5.3%-99.1%]</td>
+<td align="left">114 494 [ 8 193-159 840]</td>
+<td align="left">2 760</td>
+<td align="left">2021-06-06</td>
+</tr>
+<tr class="even">
+<td align="left">Quebec</td>
+<td align="left">84.9% [63.6%-97.6%]</td>
+<td align="left">69 293 [11 216-102 155]</td>
+<td align="left">1 086</td>
+<td align="left">2021-06-17</td>
+</tr>
+<tr class="odd">
+<td align="left">Saskatchewan</td>
+<td align="left">38.8% [4.1%-76.8%]</td>
+<td align="left">3 871 [ 464- 8 174]</td>
+<td align="left">37</td>
+<td align="left">2021-07-09</td>
+</tr>
+<tr class="even">
+<td align="left">Canada</td>
+<td align="left">71.3% [31.7%-89.0%]</td>
+<td align="left">248 472 [46 188-338 275]</td>
+<td align="left">4 210</td>
+<td align="left">2021-06-10</td>
+</tr>
+</tbody>
+</table>
+<p>Based on the above the worst case scenario could result in roughly 157 000 more deaths by the end of September 2021.</p>
+</div>
+<div id="canada" class="section level2" number="10.5">
+<h2 number="10.5"><span class="header-section-number">10.5</span> Canada</h2>
+<p>We plot below the results for Canada as a whole. This is the sum of the provincial projections.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_projection_za_1-1.png" alt="Projected Attack Rate and Daily Deaths in Canada" width="3840" />
+<p class="caption">
+Projected Attack Rate and Daily Deaths in Canada
+</p>
+</div>
+<p>The attack rate and deaths over a longer period for both the constant mobility and increased mobility scenarios are plotted below:</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_projection_za_2-1.png" alt="Projected Attack Rate and Daily Deaths in Canada by Scenario" width="3840" />
+<p class="caption">
+Projected Attack Rate and Daily Deaths in Canada by Scenario
+</p>
+</div>
+</div>
+<div id="alberta-1" class="section level2" number="10.6">
+<h2 number="10.6"><span class="header-section-number">10.6</span> Alberta</h2>
+<p>Below we plot the projections for Alberta.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_projection_ab_1-1.png" alt="Projected Attack Rate and Daily Deaths in Alberta" width="3840" />
+<p class="caption">
+Projected Attack Rate and Daily Deaths in Alberta
+</p>
+</div>
+<p>The attack rate and deaths over a longer period for both the constant mobility and increased mobility scenarios are plotted below:</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_projection_ab_2-1.png" alt="Projected Attack Rate and Daily Deaths in Alberta by Scenario" width="3840" />
+<p class="caption">
+Projected Attack Rate and Daily Deaths in Alberta by Scenario
+</p>
+</div>
+</div>
+<div id="british-columbia-1" class="section level2" number="10.7">
+<h2 number="10.7"><span class="header-section-number">10.7</span> British Columbia</h2>
+<p>Below we plot the projections for the British Columbia.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_projection_bc_1-1.png" alt="Projected Attack Rate and Daily Deaths in British Columbia" width="3840" />
+<p class="caption">
+Projected Attack Rate and Daily Deaths in British Columbia
+</p>
+</div>
+<p>The attack rate and deaths over a longer period for both the constant mobility and increased mobility scenarios are plotted below:</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_projection_bc_2-1.png" alt="Projected Attack Rate and Daily Deaths in British Columbia by Scenario" width="3840" />
+<p class="caption">
+Projected Attack Rate and Daily Deaths in British Columbia by Scenario
+</p>
+</div>
+</div>
+<div id="manitoba-1" class="section level2" number="10.8">
+<h2 number="10.8"><span class="header-section-number">10.8</span> Manitoba</h2>
+<p>Below we plot the projections for Manitoba</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_projection_mb_1-1.png" alt="Projected Attack Rate and Daily Deaths in Manitoba" width="3840" />
+<p class="caption">
+Projected Attack Rate and Daily Deaths in Manitoba
+</p>
+</div>
+<p>The attack rate and deaths over a longer period for both the constant mobility and increased mobility scenarios are plotted below:</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_projection_mb_2-1.png" alt="Projected Attack Rate and Daily Deaths in Manitoba by Scenario" width="3840" />
+<p class="caption">
+Projected Attack Rate and Daily Deaths in Manitoba by Scenario
+</p>
+</div>
+</div>
+<div id="maritime-provinces-1" class="section level2" number="10.9">
+<h2 number="10.9"><span class="header-section-number">10.9</span> Maritime Provinces</h2>
+<p>Below we plot the projections for Maritime Provinces</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_projection_ns_1-1.png" alt="Projected Attack Rate and Daily Deaths in Maritime Provinces" width="3840" />
+<p class="caption">
+Projected Attack Rate and Daily Deaths in Maritime Provinces
+</p>
+</div>
+<p>The attack rate and deaths over a longer period for both the constant mobility and increased mobility scenarios are plotted below:</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_projection_ns_2-1.png" alt="Projected Attack Rate and Daily Deaths in Maritime Provinces by Scenario" width="3840" />
+<p class="caption">
+Projected Attack Rate and Daily Deaths in Maritime Provinces by Scenario
+</p>
+</div>
+</div>
+<div id="ontario-1" class="section level2" number="10.10">
+<h2 number="10.10"><span class="header-section-number">10.10</span> Ontario</h2>
+<p>Below we plot the projections for Ontario.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_projection_on_1-1.png" alt="Projected Attack Rate and Daily Deaths in Ontario" width="3840" />
+<p class="caption">
+Projected Attack Rate and Daily Deaths in Ontario
+</p>
+</div>
+<p>The attack rate and deaths over a longer period for both the constant mobility and increased mobility scenarios are plotted below:</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_projection_on_2-1.png" alt="Projected Attack Rate and Daily Deaths in Ontario by Scenario" width="3840" />
+<p class="caption">
+Projected Attack Rate and Daily Deaths in Ontario by Scenario
+</p>
+</div>
+</div>
+<div id="quebec-1" class="section level2" number="10.11">
+<h2 number="10.11"><span class="header-section-number">10.11</span> Quebec</h2>
+<p>Below we plot the projections for Quebec.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_projection_qc_1-1.png" alt="Projected Attack Rate and Daily Deaths in Quebec" width="3840" />
+<p class="caption">
+Projected Attack Rate and Daily Deaths in Quebec
+</p>
+</div>
+<p>The attack rate and deaths over a longer period for both the constant mobility and increased mobility scenarios are plotted below:</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_projection_qc_2-1.png" alt="Projected Attack Rate and Daily Deaths in Quebec by Scenario" width="3840" />
+<p class="caption">
+Projected Attack Rate and Daily Deaths in Quebec by Scenario
+</p>
+</div>
+</div>
+<div id="saskatchewan-1" class="section level2" number="10.12">
+<h2 number="10.12"><span class="header-section-number">10.12</span> Saskatchewan</h2>
+<p>Below we plot the projections for Saskatchewan.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_projection_oth_1-1.png" alt="Projected Attack Rate and Daily Deaths in Saskatchewan" width="3840" />
+<p class="caption">
+Projected Attack Rate and Daily Deaths in Saskatchewan
+</p>
+</div>
+<p>The attack rate and deaths over a longer period for both the constant mobility and increased mobility scenarios are plotted below:</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_projection_oth_2-1.png" alt="Projected Attack Rate and Daily Deaths in Saskatchewan by Scenario" width="3840" />
+<p class="caption">
+Projected Attack Rate and Daily Deaths in Saskatchewan by Scenario
+</p>
+</div>
+</div>
+</div>
+<div id="discussion" class="section level1" number="11">
+<h1 number="11"><span class="header-section-number">11</span> Discussion</h1>
+<p>There remains significant uncertainty with all matters relating this epidemic. This includes uncertainty in data, assumptions and many epidemiological and medical matters relating to this disease. It is therefore likely that the model will not be accurate. It is also reflected in the wide confidence intervals of many of the results of the model.</p>
+<p>Some researchers have gone as far as to say that it is not possible to accurately estimate the mean number of fatalities of pandemics based on data (<span class="citation">[10]</span> &amp; <span class="citation">[11]</span>). This would indicate the goal of the paper may be futile.</p>
+<p>This paper has however attempted to allow for uncertainty using the Bayesian approach here which results in at least some distribution of possible results, some of which are definitely catastrophic and some of which are less severe.</p>
+<div id="limitations" class="section level2" number="11.1">
+<h2 number="11.1"><span class="header-section-number">11.1</span> Limitations</h2>
+<p>This analysis has various limitations. We highlight a few below but there are many. Perhaps the most important being the lack of good quality data.</p>
+<ul>
+<li>The model is a simplistic high-level single population model for each province. It contains no differentiation by age groups or any further details. This is required to make the hierarchical model manageable. It seems still to provide useful information on potential movements in the epidemic. However, this homogeneity may result in overestimation of attack rates and hence deaths.</li>
+<li>This model does not allow for the impact of vaccinations.</li>
+<li>Similar to the above point various groups even of the same age may have varying susceptibility to the virus. Varying susceptibility may reduce the effective herd immunity threshold of the disease.</li>
+<li>The model does not take account of changes in many interventions that do not impact general mobility such as social distancing, handwashing and testing, tracing and isolation. The model does take account of the average impact of these interventions over time, but changes in these interventions will not be taken account of. It could be argued that the AR(2) autoregressive term is taking account of these factors.</li>
+<li>The paper does take account of mask-wearing. This is done approximately and only measures the implementation of the regulation and not actual compliance with the regulations. These parameters may also not be capturing only this effect and may include other effects that occurred at the same time. Similarly these variable may not be fully capturing increased compliance with these regulations over time.</li>
+<li>Google Mobility data may not effectively cover the Canadian population</li>
+<li>IFR assumptions may be wrong:
+<ul>
+<li>It might be higher or lower in Canada than in <span class="citation">[12]</span>. The IFR employed though has been found consistent with various sources such as <span class="citation">[13]</span>, <span class="citation">[14]</span> and <span class="citation">[15]</span>.</li>
+<li>It does not consider health system capacity. In adverse scenarios the IFR might increase if health system capacity is exceeded.</li>
+</ul></li>
+<li>The autoregressive term may change in future. In current projections the term is kept constant going forward. If the term changes in future it may result in increased infections and deaths that cannot be projected by the model as is.
+<ul>
+<li>In times of accelerating spread this would probably result in over-prediction of the epidemic.</li>
+<li>In times of slowing spread this may result in under-estimation of future infections.</li>
+</ul></li>
+<li>Given the calibration to deaths, this model is unlikely to be able to predict a “second wave” until deaths start increasing.</li>
+</ul>
+</div>
+<div id="impact-of-interventions" class="section level2" number="11.2">
+<h2 number="11.2"><span class="header-section-number">11.2</span> Impact of Interventions</h2>
+<p>In Europe the lockdowns have been able to reduce <span class="math inline">\(R_{t}\)</span> below 1 for various countries <span class="citation">[16]</span>. From the results it’s clear that <span class="math inline">\(R_{t,m}\)</span> in most provinces has reduced from the starting values of <span class="math inline">\(R_{0,m}\)</span> and this has slowed the spread of the epidemic in Canada saving lives.</p>
+</div>
+<div id="increasing-mobility" class="section level2" number="11.3">
+<h2 number="11.3"><span class="header-section-number">11.3</span> Increasing mobility</h2>
+<p>Based on the modelling increased mobility it is expected to result in roughly -4 000 more deaths by the end of the year. This ignores other impacts such as ICU availability and the impact on deaths from other causes which would be expected to increase these figures, but also the impact of the homogeneity assumption which might be exacerbating this number.</p>
+</div>
+<div id="reducing-mobility" class="section level2" number="11.4">
+<h2 number="11.4"><span class="header-section-number">11.4</span> Reducing Mobility</h2>
+<p>Reducing mobility could result in roughly -47 000 fewer deaths by the end of the year.</p>
+</div>
+<div id="relevance-of-ifr" class="section level2" number="11.5">
+<h2 number="11.5"><span class="header-section-number">11.5</span> Relevance of IFR</h2>
+<p>The IFR is not treated as a parameter but as a constant with random noise. Changes to the IFR will change the modelled infections that correlate with the observed deaths. Sensitivity to the IFR could be modelled.</p>
+<p>If the IFR is higher than what is assumed (which would seem likely), we would expect lower attack rates at present and thus the epidemic could result in a higher ultimate death toll as well. A lower than assumed IFR would imply more people have been infected already and we would be further along in the epidemic.</p>
+</div>
+<div id="using-mobility-data" class="section level2" number="11.6">
+<h2 number="11.6"><span class="header-section-number">11.6</span> Using mobility data</h2>
+<p>Using mobility data is useful not only to measure the impact of government interventions but also to include the societal response to those interventions (as they affect mobility). This means that changes in the reaction to new regulations can be modelled. It may also be useful going forward as many new regulations are introduced possibly at a provincial level to summarise the impact of interventions numerically. From this research it appears that mobility cannot explain the pattern of spread of the epidemic fully.</p>
+</div>
+<div id="autorgressive-term" class="section level2" number="11.7">
+<h2 number="11.7"><span class="header-section-number">11.7</span> Autorgressive Term</h2>
+<p>The introduction of the autoregressive process as per <span class="citation">[3]</span> to model further residuals has improved this aspect of the model. This term may be reflecting other NPIs, general population awareness and behaviour adjustment or other unmodelled disease effects. However these should be treated as an error term in that they do not aid the understanding of the disease and show deficiencies in this model.</p>
+</div>
+<div id="further-work" class="section level2" number="11.8">
+<h2 number="11.8"><span class="header-section-number">11.8</span> Further Work</h2>
+<p>Along with the above, the author intends to investigate the following:</p>
+<ul>
+<li>Search and include further indexes that may track other interventions to model their effect.</li>
+<li>Analyse the sensitivity of results to changes in IFR.</li>
+<li>Consider incorporating health system constraints and their impact on IFRs.</li>
+<li>Allowances for improvements in IFRs due to improved treatment protocols and higher health system capacity in some provinces.</li>
+<li>Consider adjusting completeness of reporting over time.</li>
+</ul>
+</div>
+</div>
+<div id="detailed-assumptions-and-methodology" class="section level1" number="12">
+<h1 number="12"><span class="header-section-number">12</span> Detailed Assumptions and Methodology</h1>
+<p>The model assumes that the current reproduction number, <span class="math inline">\(R_{t,m}\)</span>, is a function of the initial reproduction number, <span class="math inline">\(R_{0,m}\)</span>, and changes in mobility over time. It then calculates infections as a function of <span class="math inline">\(R_{t,m}\)</span> over time, and then, using these infections calculates deaths from the infections based on a distribution of time to death.</p>
+<p>Various prior distributions are assumed. The model structure is similar to that in <span class="citation">[1]</span> and is briefly documented below. The parameters are estimated jointly using a single hierarchical model covering all provinces. This means that data in different provinces are combined to inform all parameters in the model. As per <span class="citation">[1]</span>, fitting was done in R using Stan with an adaptive Hamiltonian Monte Carlo sampler.</p>
+<div id="the-model" class="section level2" number="12.1">
+<h2 number="12.1"><span class="header-section-number">12.1</span> The Model</h2>
+<p>The model is documented here but is similar to <span class="citation">[1]</span>. The model assumes a base reproduction number (<span class="math inline">\(R_{0,m}\)</span>) for each province (<span class="math inline">\(m\)</span>) and then it models future values of the reproduction number using mobility indexes as follows:</p>
+<p><span class="math inline">\(R_{t,m}=R_{0,m}\cdot2\cdot\phi^{-1}(-(\alpha+\alpha_{m}^s)I_{t,m}^{\alpha}-(\beta+\beta_{m}^s)I_{t,m}^{\beta}-\epsilon_{w_m(t),m})\)</span></p>
+<p>Here:</p>
+<ul>
+<li><span class="math inline">\(t\)</span> is the day.</li>
+<li><span class="math inline">\(\phi^{-1}\)</span> is the inverse logit function.</li>
+<li><span class="math inline">\(I_{t,m}^{\alpha}\)</span> is the average mobility indexes from Google Mobility <span class="citation">[5]</span> data for each province over time. Typical movements are represented by 0 and atypical movements are represented by increases or decreases to the above.</li>
+<li><span class="math inline">\(\alpha\)</span> is the effect of <span class="math inline">\(I_{t,m}^{\alpha}\)</span> on <span class="math inline">\(R_{t,m}\)</span> independent of province.</li>
+<li><span class="math inline">\(\alpha_{m}^s\)</span> is the province specific effect of <span class="math inline">\(I_{t,m}^{\alpha}\)</span> on <span class="math inline">\(R_{t,m}\)</span>.</li>
+<li><span class="math inline">\(I_{t,m}^{\beta}\)</span> is the mandatory indoor mask-wearing indicator variable for province <span class="math inline">\(m\)</span> at time <span class="math inline">\(t\)</span>.</li>
+<li><span class="math inline">\(\beta\)</span> is the effect of <span class="math inline">\(I_{t,m}^{\beta}\)</span> on <span class="math inline">\(R_{t,m}\)</span> independent of province.</li>
+<li><span class="math inline">\(\beta_{m}^s\)</span> is the province specific effect of <span class="math inline">\(I_{t,m}^{\beta}\)</span> on <span class="math inline">\(R_{t,m}\)</span>.</li>
+<li><span class="math inline">\(\epsilon_{w_m(t),m}\)</span> is a AR(2) process modelled in weeks. It is centred on 0. This term represents unexplained variation in the model over time.</li>
+<li><span class="math inline">\(w_m(t)\)</span> is the week index associated with <span class="math inline">\(t\)</span> for province <span class="math inline">\(m\)</span>.</li>
+</ul>
+<p>New infections are modelled as:</p>
+<p><span class="math inline">\(c_{t,m}=S_{t,m}R_{t,m}\sum_{\tau=0}^{t-1}c_{\tau,m}g_{t-\tau}\)</span> where <span class="math inline">\(S_{t,m}=1 - \frac{\sum_{i=0}^{t-1}c_{i,m}}{N_{m}}\)</span>.</p>
+<p>New infections, <span class="math inline">\(c_{t,m}\)</span> at time <span class="math inline">\(t\)</span> are a function of proportion of population not yet infected (<span class="math inline">\(S_{t,m}\)</span>), the reproduction number (<span class="math inline">\(R_{t,m}\)</span>) and infections prior to that <span class="math inline">\(c_{\tau,m}\)</span> as well as an infectiousness curve <span class="math inline">\(g_{t-\tau}\)</span>. <span class="math inline">\(N_m\)</span> is the population in province <span class="math inline">\(m\)</span>.</p>
+<p>Deaths, <span class="math inline">\(d_{t,m}\)</span> are modelled as:</p>
+<p><span class="math inline">\(d_{t,m}=ifr_{m}^*\sum_{\tau=0}^{t-1}c_{\tau,m}\pi_{t-\tau}\)</span></p>
+<p>Here:</p>
+<ul>
+<li><span class="math inline">\(ifr_{m}^*\)</span> is the average IFR in the province (with random noise added).</li>
+<li><span class="math inline">\(\pi_{t-\tau}\)</span> is a distribution of time to death since infection.</li>
+</ul>
+<p>Reported deaths <span class="math inline">\(D_{t,m}\)</span> are assumed to have the following distribution:</p>
+<p><span class="math inline">\(D_{t,m} \sim Negative\ Binomial(d_{t,m},d_{t,m}+ \frac{{d}_{t,m}^2}{\phi})\)</span></p>
+<p>If <span class="math inline">\(Y \sim N(\mu,\sigma)\)</span> then we define <span class="math inline">\(N^{+}\)</span> to mean the distribution of <span class="math inline">\(|Y| \sim N^{+}(\mu,\sigma)\)</span>.</p>
+<p>It is assumed that:</p>
+<p><span class="math inline">\(\phi \sim N^{+}(0,5)\)</span></p>
+<p>Then: <span class="math inline">\(d_{t,m}=E(D_{t,m})\)</span></p>
+</div>
+<div id="prior-assumptions-and-random-noise" class="section level2" number="12.2">
+<h2 number="12.2"><span class="header-section-number">12.2</span> Prior Assumptions and Random Noise</h2>
+<p>The following assumptions are taken as is from <span class="citation">[1]</span> except where indicated. These are also very similar to the more recent <span class="citation">[17]</span>.</p>
+<p>Random noise is added to the IFR as follows:</p>
+<p><span class="math inline">\(ifr_{m}^*=ifr_{m}\cdot N(1,0.1)\)</span></p>
+<p><span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> are distributed as follows:</p>
+<p><span class="math inline">\(\alpha \sim N(0,0.5)\)</span></p>
+<p><span class="math inline">\(\beta \sim N^{+}(0,1)\)</span></p>
+<p>The above distribution for <span class="math inline">\(\beta\)</span> has been increased to reflect <span class="citation">[18]</span> which indicated an effect of mask-wearing. In this paper a relative risk of 0.56 is indicated for mask-wearing in non-health-care settings. The above prior assumption would indicate a 0.62 expected relative risk. <span class="math inline">\(\beta\)</span> is not a parameter in the model used in <span class="citation">[1]</span>.</p>
+<p>Then for the provincial specific index effects the following is used:</p>
+<p><span class="math inline">\(\alpha_{m}^s \sim N(0,\gamma^{\alpha})\)</span> with <span class="math inline">\(\gamma^{\alpha} \sim N^{+}(0,0.5)\)</span></p>
+<p><span class="math inline">\(\beta_{m}^s \sim N(0,\gamma^{\beta})\)</span> with <span class="math inline">\(\gamma^{\beta} \sim N^{+}(0,0.5)\)</span></p>
+<p><span class="math inline">\(\beta_{m}^s\)</span> is a parameter in the model used in <span class="citation">[1]</span>.</p>
+<p>The <span class="math inline">\(R_{0,m}\)</span> are defined to be distributed normally as follows:</p>
+<p><span class="math inline">\(R_{0,m} \sim N(3.28,\kappa)\)</span> with <span class="math inline">\(\kappa \sim N^{+}(0,0.5)\)</span></p>
+<p><span class="math inline">\(\epsilon_{w_m(t),m}\)</span>, the weekly province specific effect above is as described in <span class="citation">[3]</span>:</p>
+<ul>
+<li>It is modelled as an AR(2) process.</li>
+<li>It has a stationary standard deviation <span class="math inline">\(\sigma_w\)</span>.<br />
+</li>
+<li><span class="math inline">\(\epsilon_{1,m} \sim N(0,\sigma^*_w)\)</span></li>
+<li><span class="math inline">\(\epsilon_{w,m} \sim N(\rho_1\epsilon_{w-1,m}+\rho_2\epsilon_{w-2,m},\sigma^*_w)\)</span></li>
+<li><span class="math inline">\(\rho_1\)</span> and <span class="math inline">\(\rho_2\)</span> are independent with <span class="math inline">\(\rho_1 \sim N(0.8,0.05)\)</span> and <span class="math inline">\(\rho_2 \sim N(0.1,0.05)\)</span> both conditioned to be in [0,1].</li>
+<li>And <span class="math inline">\(\sigma_w \sim N^+(0,0.2)\)</span></li>
+<li>Then standard deviation of the weekly updates is <span class="math inline">\(\sigma^*=\sigma_w \sqrt{1-\rho_1^2-\rho_2^2-2\rho_1^2\rho_2/(1-\rho_2)}\)</span></li>
+</ul>
+<p>Infectiousness follows this distribution:</p>
+<p><span class="math inline">\(g \sim Gamma(6.5,0.62)\)</span></p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_serial_interval-1.png" alt="Infectiousness / Serial Interval" width="2100" />
+<p class="caption">
+Infectiousness / Serial Interval
+</p>
+</div>
+<p>Time to death follows this distribution:</p>
+<p><span class="math inline">\(\pi \sim Gamma(5.1,0.86)+Gamma(17.8,0.45)\)</span></p>
+<p>The distribution of time to death is plotted below.</p>
+<div class="figure">
+<img src="modelling_covid-19_in_canada_at_a_provincial_level_files/figure-html/plot_time_to_death-1.png" alt="Distribution of Time to Death since Infection" width="2100" />
+<p class="caption">
+Distribution of Time to Death since Infection
+</p>
+</div>
+<p>The above implies an average time to death of 23 days.</p>
+</div>
+<div id="death-and-confirmed-case-data" class="section level2" number="12.3">
+<h2 number="12.3"><span class="header-section-number">12.3</span> Death and Confirmed Case Data</h2>
+<p>Death and case data were used from <span class="citation">[4]</span>. This data set contains provincial case and death data as released by various provinces.</p>
+<p>The only adjustments to the data relates to large numbers of deaths reported in Ontario on 2 and 3 October 2020 “due to a data review.” 111 of the deaths reported on these two dates are deaths that occurred during the prior spring and summer (see <span class="citation">[19]</span> and <span class="citation">[20]</span>). Based on this these deaths were removed from 2 and 3 October and added back in prior days in proportion to deaths reported up un till 30 September 2020. The net effect is no change in reported deaths, but a peak in October is avoided which would have biased calibration of the model.</p>
+</div>
+<div id="provinces" class="section level2" number="12.4">
+<h2 number="12.4"><span class="header-section-number">12.4</span> Provinces</h2>
+<p>Provinces are grouped as follows. The province grouping “Territories” are not modelled as there is too few reported deaths to date to model.</p>
+<table>
+<caption>Province Groupings</caption>
+<thead>
+<tr class="header">
+<th align="left">Province</th>
+<th align="left">Province Grouping</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alberta</td>
+<td align="left">Alberta</td>
+</tr>
+<tr class="even">
+<td align="left">British Columbia</td>
+<td align="left">British Columbia</td>
+</tr>
+<tr class="odd">
+<td align="left">Manitoba</td>
+<td align="left">Manitoba</td>
+</tr>
+<tr class="even">
+<td align="left">New Brunswick</td>
+<td align="left">Maritime Provinces</td>
+</tr>
+<tr class="odd">
+<td align="left">Newfoundland and Labrador</td>
+<td align="left">Maritime Provinces</td>
+</tr>
+<tr class="even">
+<td align="left">Nova Scotia</td>
+<td align="left">Maritime Provinces</td>
+</tr>
+<tr class="odd">
+<td align="left">Nunavut</td>
+<td align="left">Territories</td>
+</tr>
+<tr class="even">
+<td align="left">Northwest Territories</td>
+<td align="left">Territories</td>
+</tr>
+<tr class="odd">
+<td align="left">Ontario</td>
+<td align="left">Ontario</td>
+</tr>
+<tr class="even">
+<td align="left">Prince Edward Island</td>
+<td align="left">Maritime Provinces</td>
+</tr>
+<tr class="odd">
+<td align="left">Quebec</td>
+<td align="left">Quebec</td>
+</tr>
+<tr class="even">
+<td align="left">Saskatchewan</td>
+<td align="left">Saskatchewan</td>
+</tr>
+<tr class="odd">
+<td align="left">Yukon</td>
+<td align="left">Territories</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="infection-fatality-rates-ifr" class="section level2" number="12.5">
+<h2 number="12.5"><span class="header-section-number">12.5</span> Infection Fatality Rates (IFR)</h2>
+<p>This paper uses IFRs per Levin et al. <span class="citation">[12]</span>. The IFR (<span class="math inline">\(ifr_{m}\)</span>) for each province was calculated using the output of the squire R package <span class="citation">[21]</span> for Canada. It produces age-specific infection attack rates (IAR). The projection was done using the default parameters for Canada and the resultant attack rate (<span class="math inline">\(a_{x}\)</span>) for each 5-year age band was obtained (<span class="math inline">\(x\)</span>).</p>
+<p>The IFR formula from <span class="citation">[12]</span> was used to calculate an IFR (<span class="math inline">\(ifr_{x}\)</span> for each age band. For 80+ the age 85 was used. The attack rate and IFR were used together with the per age band IAR and these were applied to provincial populations <span class="citation">[22]</span> to calculate an average IFR for each province based on the province’s age profile.</p>
+<p><span class="math inline">\(ifr_{m}=\frac{\sum_{x}N_{x,m} \cdot a_{x} \cdot ifr_{x} }{\sum_{x}N_{x,m}}\)</span></p>
+<p>Here <span class="math inline">\(N_{x,m}\)</span> is the population in a particular province (<span class="math inline">\(m\)</span>) and age band (<span class="math inline">\(x\)</span>).</p>
+<p>Below the resultant <span class="math inline">\(ifr_{m}\)</span> are tabulated::</p>
+<table>
+<caption>Infection fatality rate by province</caption>
+<thead>
+<tr class="header">
+<th align="left">Province</th>
+<th align="left">IFR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alberta</td>
+<td align="left">0.73%</td>
+</tr>
+<tr class="even">
+<td align="left">British Columbia</td>
+<td align="left">1.02%</td>
+</tr>
+<tr class="odd">
+<td align="left">Manitoba</td>
+<td align="left">0.87%</td>
+</tr>
+<tr class="even">
+<td align="left">Maritime Provinces</td>
+<td align="left">1.11%</td>
+</tr>
+<tr class="odd">
+<td align="left">Ontario</td>
+<td align="left">0.96%</td>
+</tr>
+<tr class="even">
+<td align="left">Quebec</td>
+<td align="left">1.06%</td>
+</tr>
+<tr class="odd">
+<td align="left">Saskatchewan</td>
+<td align="left">0.89%</td>
+</tr>
+</tbody>
+</table>
+<p>The differences between provinces reflect the different age profiles in those provinces as per <span class="citation">[22]</span>.</p>
+</div>
+<div id="mobility-indexes" class="section level2" number="12.6">
+<h2 number="12.6"><span class="header-section-number">12.6</span> Mobility Indexes</h2>
+<p>Google has released aggregated mobility data for various countries and for sub-regions in those countries. These data are generated from devices that have enabled the Location History in Google Maps. This feature is available both on Android and iOS devices but is off by default.</p>
+<p>For Canada, these data contain the mobility indexes for each province. These are described in <span class="citation">[5]</span> as follows:</p>
+<ul>
+<li>Grocery &amp; pharmacy: Mobility trends for places like grocery markets, food warehouses, farmers markets, specialty food shops, drug stores, and pharmacies.</li>
+<li>Parks: Mobility trends for places like local parks, national parks, public beaches, marinas, dog parks, plazas, and public gardens.</li>
+<li>Transit stations: Mobility trends for places like public transport hubs such as subway, bus, and train stations.</li>
+<li>Retail &amp; recreation: Mobility trends for places like restaurants, cafés, shopping centres, theme parks, museums, libraries, and movie theatres.</li>
+<li>Residential: Mobility trends for places of residence.</li>
+<li>Workplaces: Mobility trends for places of work.</li>
+</ul>
+<p>These measure changes in mobility relative to a baseline established before the epidemic. For example, -30% implies a 30% reduction in mobility from pre-COVID-19 mobility.</p>
+<p>As per <span class="citation">[8]</span> these data were combined into an average mobility index for each province which was an average of all mobility indexes excluding:</p>
+<ul>
+<li>Residential</li>
+<li>Parks</li>
+</ul>
+<p>In <span class="citation">[1]</span> three indexes were used (Residential, Transit and the rest). This was reduced for this paper due to limited data.</p>
+</div>
+</div>
+<div id="conclusion" class="section level1" number="13">
+<h1 number="13"><span class="header-section-number">13</span> Conclusion</h1>
+<p>This paper has set out to show how a Bayesian model can be fitted to the Canadian data. From the process it becomes clear that there remains significant uncertainty with all matters relating this epidemic. It is therefore likely that the model will not be accurate.</p>
+<p>This paper has however attempted to allow for uncertainty using the Bayesian approach here which results in at least some distribution of possible results, some of which are definitely catastrophic and some of which are less severe.</p>
+<p>It is hoped that this is a useful contribution to the ongoing research on the epidemic.</p>
+</div>
+<div id="author" class="section level1" number="14">
+<h1 number="14"><span class="header-section-number">14</span> Author</h1>
+<p>This report was prepared by Louis Rossouw. Please get in contact with Louis Rossouw if you have comments or wish to receive this regularly.</p>
+<p><strong>Louis Rossouw</strong><br />
+Head of Research &amp; Analytics<br />
+Gen Re | Life/Health Canada, South Africa, Australia, NZ, UK &amp; Ireland<br />
+Email: <a href="mailto:LRossouw@genre.com">LRossouw@GenRe.com</a> Mobile: +27 71 355 2550</p>
+<p><strong><em>The views in this document represent those of the author and may not represent those of Gen Re. Also note that given the significant uncertainty involved with the parameters, data and methodology care should be taken with these numbers and their use.</em></strong></p>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body">
+<div id="ref-Vollmer2020" class="csl-entry">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">M. Vollmer <em>et al.</em>, <span>“Report 20: <span>A</span> sub-national analysis of the rate of transmission of <span>COVID</span>-19 in <span>Italy</span>,”</span> <span>Imperial College London</span>, 2020 [Online]. Available: <a href="https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-20-italy/">https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-20-italy/</a></div>
+</div>
+<div id="ref-Mellan2020" class="csl-entry">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">T. Mellan <em>et al.</em>, <span>“Report 21: <span>Estimating COVID</span>-19 cases and reproduction number in <span>Brazil</span>,”</span> <span>Imperial College London</span>, 2020 [Online]. Available: <a href="https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-21-brazil/">https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-21-brazil/</a></div>
+</div>
+<div id="ref-Unwin2020b" class="csl-entry">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">H. J. T. Unwin <em>et al.</em>, <span>“State-level tracking of <span>COVID</span>-19 in the <span>United States</span>,”</span> <em>Nature Communications</em>, vol. 11, no. 1, 1, p. 6189, Dec. 2020, doi: <a href="https://doi.org/10.1038/s41467-020-19652-6">10.1038/s41467-020-19652-6</a>. [Online]. Available: <a href="https://www.nature.com/articles/s41467-020-19652-6">https://www.nature.com/articles/s41467-020-19652-6</a>. [Accessed: 01-Jan-2021]</div>
+</div>
+<div id="ref-Berry2020" class="csl-entry">
+<div class="csl-left-margin">[4] </div><div class="csl-right-inline">I. Berry, J.-P. R. Soucy, A. Tuite, and D. Fisman, <span>“Open access epidemiologic data and an interactive dashboard to monitor the <span>COVID</span>-19 outbreak in <span>Canada</span>,”</span> <em>Canadian Medical Association Journal</em>, vol. 192, no. 15, pp. E420–E420, Apr. 2020, doi: <a href="https://doi.org/10.1503/cmaj.75262">10.1503/cmaj.75262</a>. [Online]. Available: <a href="https://www.cmaj.ca/content/192/15/E420">https://www.cmaj.ca/content/192/15/E420</a></div>
+</div>
+<div id="ref-Google2020" class="csl-entry">
+<div class="csl-left-margin">[5] </div><div class="csl-right-inline">Google LLC, <span>“Google <span>COVID</span>-19 community mobility reports.”</span> 2020 [Online]. Available: <a href="https://www.google.com/covid19/mobility/">https://www.google.com/covid19/mobility/</a></div>
+</div>
+<div id="ref-Karaivanov2020" class="csl-entry">
+<div class="csl-left-margin">[6] </div><div class="csl-right-inline">A. Karaivanov, S. E. Lu, H. Shigeoka, C. Chen, and S. Pamplona, <span>“Face <span>Masks</span>, <span>Public Policies</span> and <span>Slowing</span> the <span>Spread</span> of <span>COVID</span>-19: <span>Evidence</span> from <span>Canada</span>,”</span> <em>medRxiv</em>, p. 2020.09.24.20201178, Oct. 2020, doi: <a href="https://doi.org/10.1101/2020.09.24.20201178">10.1101/2020.09.24.20201178</a>. [Online]. Available: <a href="https://www.medrxiv.org/content/10.1101/2020.09.24.20201178v2">https://www.medrxiv.org/content/10.1101/2020.09.24.20201178v2</a>. [Accessed: 31-Oct-2020]</div>
+</div>
+<div id="ref-RCT2019" class="csl-entry">
+<div class="csl-left-margin">[7] </div><div class="csl-right-inline">R Core Team, <em>R: <span>A</span> language and environment for statistical computing</em>. <span>Vienna, Austria</span>: <span>R Foundation for Statistical Computing</span>, 2019 [Online]. Available: <a href="https://www.R-project.org/">https://www.R-project.org/</a></div>
+</div>
+<div id="ref-Nouvellet2020" class="csl-entry">
+<div class="csl-left-margin">[8] </div><div class="csl-right-inline">P. Nouvellet <em>et al.</em>, <span>“Report 26: <span>Reduction</span> in mobility and <span>COVID</span>-19 transmission,”</span> <span>Imperial College London</span>, 2020 [Online]. Available: <a href="https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-26-mobility-transmission/">https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-26-mobility-transmission/</a></div>
+</div>
+<div id="ref-Box1979" class="csl-entry">
+<div class="csl-left-margin">[9] </div><div class="csl-right-inline">G. E. P. Box, <span>“Robustness in the strategy of scientific model building,”</span> in <em>Robustness in statistics</em>, <span>Elsevier</span>, 1979, pp. 201–236 [Online]. Available: <a href="https://doi.org/10.1016/b978-0-12-438150-6.50018-2">https://doi.org/10.1016/b978-0-12-438150-6.50018-2</a></div>
+</div>
+<div id="ref-Taleb2020b" class="csl-entry">
+<div class="csl-left-margin">[10] </div><div class="csl-right-inline">N. N. Taleb, Y. Bar-Yam, and P. Cirillo, <span>“On <span>Single Point Forecasts</span> for <span>Fat</span>-<span>Tailed Variables</span>,”</span> 31-Jul-2020. [Online]. Available: <a href="http://arxiv.org/abs/2007.16096">http://arxiv.org/abs/2007.16096</a>. [Accessed: 26-Oct-2020]</div>
+</div>
+<div id="ref-Cirillo2020" class="csl-entry">
+<div class="csl-left-margin">[11] </div><div class="csl-right-inline">P. Cirillo and N. N. Taleb, <span>“Tail risk of contagious diseases,”</span> <em>Nature Physics</em>, vol. 16, no. 6, pp. 606–613, May 2020, doi: <a href="https://doi.org/10.1038/s41567-020-0921-x">10.1038/s41567-020-0921-x</a>. [Online]. Available: <a href="https://www.nature.com/articles/s41567-020-0921-x">https://www.nature.com/articles/s41567-020-0921-x</a></div>
+</div>
+<div id="ref-Levin2020" class="csl-entry">
+<div class="csl-left-margin">[12] </div><div class="csl-right-inline">A. T. Levin, G. Meyerowitz-Katz, N. Owusu-Boaitey, K. B. Cochran, and S. P. Walsh, <span>“Assessing the age specificity of infection fatality rates for <span>COVID</span>-19: <span>Systematic</span> review, <span>Meta</span>-<span>Analysis</span>, and public policy implications,”</span> Oct. 2020, doi: <a href="https://doi.org/10.1101/2020.07.23.20160895">10.1101/2020.07.23.20160895</a>. [Online]. Available: <a href="https://doi.org/10.1101/2020.07.23.20160895">https://doi.org/10.1101/2020.07.23.20160895</a>. [Accessed: 23-Nov-2020]</div>
+</div>
+<div id="ref-MeyerowitzKatz2020" class="csl-entry">
+<div class="csl-left-margin">[13] </div><div class="csl-right-inline">G. Meyerowitz-Katz and L. Merone, <span>“A systematic review and meta-analysis of published research data on <span>COVID</span>-19 infection-fatality rates”</span> [Online]. Available: <a href="https://www.medrxiv.org/content/10.1101/2020.05.03.20089854v3">https://www.medrxiv.org/content/10.1101/2020.05.03.20089854v3</a></div>
+</div>
+<div id="ref-Verity2020" class="csl-entry">
+<div class="csl-left-margin">[14] </div><div class="csl-right-inline">R. Verity <em>et al.</em>, <span>“Estimates of the severity of coronavirus disease 2019: A model-based analysis,”</span> <em>The Lancet Infectious Diseases</em>, vol. 20, no. 6, pp. 669–677, Jun. 2020, doi: <a href="https://doi.org/10.1016/s1473-3099(20)30243-7">10.1016/s1473-3099(20)30243-7</a>. [Online]. Available: <a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext">https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext</a></div>
+</div>
+<div id="ref-Brazeau2020" class="csl-entry">
+<div class="csl-left-margin">[15] </div><div class="csl-right-inline">N. Brazeau <em>et al.</em>, <span>“Report 34: <span>COVID</span>-19 infection fatality ratio: Estimates from seroprevalence,”</span> <span>Imperial College London</span>, 34, Oct. 2020 [Online]. Available: <a href="https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-34-ifr/">https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-34-ifr/</a>. [Accessed: 30-Oct-2020]</div>
+</div>
+<div id="ref-Flaxman2020" class="csl-entry">
+<div class="csl-left-margin">[16] </div><div class="csl-right-inline">S. Flaxman <em>et al.</em>, <span>“Report 13: <span>Estimating</span> the number of infections and the impact of non-pharmaceutical interventions on <span>COVID</span>-19 in 11 <span>European</span> countries,”</span> <span>Imperial College London</span>, 2020 [Online]. Available: <a href="https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-13-europe-npi-impact/">https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-13-europe-npi-impact/</a></div>
+</div>
+<div id="ref-Unwin2020a" class="csl-entry">
+<div class="csl-left-margin">[17] </div><div class="csl-right-inline">H. J. T. Unwin <em>et al.</em>, <span>“State-level tracking of <span>COVID</span>-19 in the <span>United States</span>,”</span> <em>medRxiv</em>, p. 2020.07.13.20152355, Oct. 2020, doi: <a href="https://doi.org/10.1101/2020.07.13.20152355">10.1101/2020.07.13.20152355</a>. [Online]. Available: <a href="https://www.medrxiv.org/content/10.1101/2020.07.13.20152355v2">https://www.medrxiv.org/content/10.1101/2020.07.13.20152355v2</a>. [Accessed: 01-Nov-2020]</div>
+</div>
+<div id="ref-Chu2020" class="csl-entry">
+<div class="csl-left-margin">[18] </div><div class="csl-right-inline">D. K. Chu <em>et al.</em>, <span>“Physical distancing, face masks, and eye protection to prevent person-to-person transmission of <span>SARS</span>-<span>CoV</span>-2 and <span>COVID</span>-19: A systematic review and meta-analysis,”</span> <em>The Lancet</em>, vol. 395, no. 10242, pp. 1973–1987, Jun. 2020, doi: <a href="https://doi.org/10.1016/S0140-6736(20)31142-9">10.1016/S0140-6736(20)31142-9</a>. [Online]. Available: <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)31142-9/fulltext">https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)31142-9/fulltext</a></div>
+</div>
+<div id="ref-Rodrigues2020" class="csl-entry">
+<div class="csl-left-margin">[19] </div><div class="csl-right-inline">G. Rodrigues, <span>“Ontario reports new record of 732 coronavirus cases, adds 76 more deaths due to data cleanup,”</span> October 2, 2020 9:36 am. [Online]. Available: <a href="https://globalnews.ca/news/7373691/ontario-coronavirus-cases-october-2-covid19/">https://globalnews.ca/news/7373691/ontario-coronavirus-cases-october-2-covid19/</a>. [Accessed: 01-Nov-2020]</div>
+</div>
+<div id="ref-Rocca2020" class="csl-entry">
+<div class="csl-left-margin">[20] </div><div class="csl-right-inline">R. Rocca, <span>“Ontario reports 653 coronavirus cases after record number of tests completed,”</span> October 3, 2020 9:31 am. [Online]. Available: <a href="https://globalnews.ca/news/7376209/ontario-coronavirus-cases-oct-3-covid19/">https://globalnews.ca/news/7376209/ontario-coronavirus-cases-oct-3-covid19/</a>. [Accessed: 01-Nov-2020]</div>
+</div>
+<div id="ref-Walker2020" class="csl-entry">
+<div class="csl-left-margin">[21] </div><div class="csl-right-inline">P. Walker <em>et al.</em>, <span>“Report 12: <span>The</span> global impact of <span>COVID</span>-19 and strategies for mitigation and suppression,”</span> <span>Imperial College London</span>, 2020 [Online]. Available: <a href="https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-12-global-impact-covid-19/">https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-12-global-impact-covid-19/</a></div>
+</div>
+<div id="ref-StatisticsCanada2020" class="csl-entry">
+<div class="csl-left-margin">[22] </div><div class="csl-right-inline">Statistics Canada, <span>“Population estimates on <span>July</span> 1st, by age and sex.”</span> <span>Government of Canada</span>, 30-Oct-2020 [Online]. Available: <a href="https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1710000501">https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1710000501</a>. [Accessed: 30-Oct-2020]</div>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
