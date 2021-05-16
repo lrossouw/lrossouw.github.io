@@ -10,8 +10,13 @@ file.copy(from = file_list,
           overwrite = TRUE)
 
 file.copy(from = "../covid19model/modelling_covid-19_in_south_africa_at_a_provincial_level.html",
-          to = "covid-19/",
+          to = "covid-19/modelling_covid-19_in_south_africa_at_a_provincial_level_hidden.html",
           overwrite = TRUE)
+
+file.copy(from = "../covid19model/modelling_covid-19_in_south_africa_at_a_provincial_level_files",
+          to = "covid-19/",
+          overwrite = TRUE,
+          recursive = TRUE)
 
 # do git stuff
 source("git_tools.R")
@@ -19,6 +24,7 @@ message = paste0("Update SA COVID-19 Model ", Sys.time())
 path = "."
 git_pull(path)
 git_add(path, path_to_add = "covid-19/modelling_covid-19_in_south_africa_at_a_provincial_level.html")
+git_add(path, path_to_add = "covid-19/modelling_covid-19_in_south_africa_at_a_provincial_level_files")
 git_add(path, path_to_add = "covid-19/projections-mob-base-south_africa*")
 git_commit(path, message)
 git_push(path)
