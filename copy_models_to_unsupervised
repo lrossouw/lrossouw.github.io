@@ -1,0 +1,6 @@
+#!/bin/bash
+
+scp -r covid-19/modelling_covid-19_in_*_files server1:/var/www/unsupervised.online_static/covid-19/
+scp covid-19/modelling_covid-19_in_canada_at_a_provincial_level_hidden.html server1:/var/www/unsupervised.online_static/covid-19/modelling_covid-19_in_canada_at_a_provincial_level.html
+scp covid-19/modelling_covid-19_in_south_africa_at_a_provincial_level_hidden.html server1:/var/www/unsupervised.online_static/covid-19/modelling_covid-19_in_south_africa_at_a_provincial_level.html
+scp covid-19/*.csv server1:/var/www/unsupervised.online_static/covid-19/
