@@ -23,7 +23,7 @@ source("git_tools.R")
 message = paste0("Update SA COVID-19 Model ", Sys.time())
 path = "."
 git_pull(path)
-git_add(path, path_to_add = "covid-19/modelling_covid-19_in_south_africa_at_a_provincial_level.html")
+git_add(path, path_to_add = "covid-19/modelling_covid-19_in_south_africa_at_a_provincial_level_hidden.html")
 git_add(path, path_to_add = "covid-19/modelling_covid-19_in_south_africa_at_a_provincial_level_files")
 git_add(path, path_to_add = "covid-19/projections-mob-base-south_africa*")
 git_commit(path, message)
