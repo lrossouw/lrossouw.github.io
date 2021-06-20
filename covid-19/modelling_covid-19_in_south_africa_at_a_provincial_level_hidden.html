@@ -10,11 +10,11 @@
 
 
 
-<meta name="date" content="2021-05-31" />
+<meta name="date" content="2021-06-19" />
 
 <title>Modelling COVID-19 in South Africa at a Provincial Level</title>
 
-<script src="modelling_covid-19_in_south_africa_at_a_provincial_level_files/header-attrs-2.7/header-attrs.js"></script>
+<script src="modelling_covid-19_in_south_africa_at_a_provincial_level_files/header-attrs-2.8/header-attrs.js"></script>
 <script src="modelling_covid-19_in_south_africa_at_a_provincial_level_files/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="modelling_covid-19_in_south_africa_at_a_provincial_level_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -263,12 +263,12 @@ div.tocify {
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row">
-<div class="col-sm-12 col-md-4 col-lg-3">
+<div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -278,7 +278,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Modelling COVID-19 in South Africa at a Provincial Level</h1>
-<h4 class="date">2021-05-31</h4>
+<h4 class="date">2021-06-19</h4>
 
 </div>
 
@@ -287,12 +287,12 @@ div.tocify {
 <h1 number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>This paper documents a model of the COVID-19 epidemic in South Africa. Mobility data is used to model the reproduction number of the COVID-19 epidemic over time using a Bayesian hierarchical model. This is achieved by adapting the work by Imperial College London researchers <span class="citation">[1]</span> for South Africa. Authors from Imperial College London have built similar models for Brazil <span class="citation">[2]</span> and the United States <span class="citation">[3]</span>. In this case the model is calibrated to excess deaths <span class="citation">[4]</span> and not case counts or reported COVID-19 deaths.</p>
 <p>The model uses mobility movement indexes by province produced by Google <span class="citation">[5]</span>. Furthermore the model includes a fixed effect for interventions introduced at the start of level 4 lockdown.</p>
-<p>The model and report are automatically generated on a regular basis using R <span class="citation">[6]</span>. This version contains data available on 27 May 2021.</p>
+<p>The model and report are automatically generated on a regular basis using R <span class="citation">[6]</span>. This version contains data available on 15 June 2021.</p>
 <p>An online, regularly updated version of this report is <a href="https://unsupervised.online/static/covid-19/modelling_covid-19_in_south_africa_at_a_provincial_level.html">available here</a>.</p>
 </div>
 <div id="updates" class="section level1" number="2">
 <h1 number="2"><span class="header-section-number">2</span> Updates</h1>
-<p>As this paper is updated over time this section will summarise significant changes. The code producing this paper is tracked using git. The git commit hash for this project at the time of generating this paper was 443200dc46600fb1aa0cf2da5c7066587a9fedc7 and this change was made on 2021-05-27.</p>
+<p>As this paper is updated over time this section will summarise significant changes. The code producing this paper is tracked using git. The git commit hash for this project at the time of generating this paper was 722c3245b00483ac0714962312b3bd86c94304e0 and this change was made on 2021-06-16.</p>
 <p>The changes summarised below excludes the weekly updates to excess deaths.</p>
 <p><strong>2020-05-31</strong></p>
 <ul>
@@ -312,7 +312,7 @@ div.tocify {
 </li>
 <li>Added a <a href="#south-africa">projection for South Africa</a> (based on sum of the provinces).<br />
 </li>
-<li>Created <a href="projections-mob-base-south_africa_v2-150-daily-20210527.csv">a CSV</a> with the daily projections. See the <a href="#projections">projection section</a> for details.</li>
+<li>Created <a href="projections-mob-base-south_africa_v2-150-daily-20210615.csv">a CSV</a> with the daily projections. See the <a href="#projections">projection section</a> for details.</li>
 <li>Added an <a href="#updates">updates section</a> to track changes to this model.</li>
 </ul>
 <p><strong>2020-06-09</strong></p>
@@ -394,6 +394,10 @@ div.tocify {
 <p><strong>2021-04-29</strong></p>
 <ul>
 <li>Update projection dates to 30 June and 30 September 2021.</li>
+</ul>
+<p><strong>2021-06-01</strong></p>
+<ul>
+<li>Adjust mobility scenarios.</li>
 </ul>
 </div>
 <div id="methodology" class="section level1" number="3">
@@ -803,9 +807,8 @@ Weekly AR(2) Factor Plot for Western Cape
 </div>
 <div id="parameter-estimates" class="section level1" number="6">
 <h1 number="6"><span class="header-section-number">6</span> Parameter Estimates</h1>
-<p>To understand the net parameter estimates for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\alpha_{m}^s\)</span> and their impact on <span class="math inline">\(R_{t,m}\)</span> the percentage reduction in <span class="math inline">\(R_{t,m}\)</span> assuming the particular index is 1 (representing a 100% reduction in average mobility) is plotted.</p>
-<p>This is equivalent to plotting <span class="math inline">\(1-2\cdot\phi^{-1}(-(\alpha+\alpha_{m}^s))\)</span> for a particular province <span class="math inline">\(m\)</span>. <span class="math inline">\(1-2\cdot\phi^{-1}(-(\beta+\beta_{m}^s))\)</span> is also plotted.</p>
-<p>The confidence intervals are relatively wide with some provinces not showing much impact of mobility, including the Western Cape. These same provinces show higher impact of NPIs introduced with Level 4 (such as mask wearing and workplace screening).</p>
+<p>To understand the net parameter estimates for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\alpha_{m}^s\)</span> and their impact on <span class="math inline">\(R_{t,m}\)</span> the percentage reduction in <span class="math inline">\(R_{t,m}\)</span> assuming a mobility index of 0.1 (representing a 0.1 reduction in average mobility below normal). This is equivalent to plotting <span class="math inline">\(1-2\cdot\phi^{-1}(-0.1(\alpha+\alpha_{m}^s))\)</span> for a particular province <span class="math inline">\(m\)</span>.</p>
+<p><span class="math inline">\(1-2\cdot\phi^{-1}(-(\beta+\beta_{m}^s))\)</span> is also plotted. This represents the impact of interventions introduced with Level 4 (including mask-wearing and workplace screening) on <span class="math inline">\(R_{t,m}\)</span>.</p>
 <div class="figure">
 <img src="modelling_covid-19_in_south_africa_at_a_provincial_level_files/figure-html/plot_parameter_estimates-1.png" alt="Model Parameter Estimates with 95% Confidence Intervals" width="3840" />
 <p class="caption">
@@ -825,8 +828,8 @@ Initial Reproduction Number by Province
 </p>
 </div>
 </div>
-<div id="current-reproduction-number-as-at-27-may-2021" class="section level2" number="7.2">
-<h2 number="7.2"><span class="header-section-number">7.2</span> Current Reproduction Number as at 27 May 2021</h2>
+<div id="current-reproduction-number-as-at-15-june-2021" class="section level2" number="7.2">
+<h2 number="7.2"><span class="header-section-number">7.2</span> Current Reproduction Number as at 15 June 2021</h2>
 <p>Current estimates and 95% confidence intervals for <span class="math inline">\(R_{t,m}\)</span> (current effective reproduction number) are plotted below for each province. A value below 1 would indicate an epidemic that is slowing while a value above 1 indicates an epidemic that is growing. It is clear that the spread of the epidemic is somewhat slowed compared to the initial <span class="math inline">\(R_{0,m}\)</span>. For some provinces the confidence interval does not include 1 which would indicate this to a stronger degree.</p>
 <div class="figure">
 <img src="modelling_covid-19_in_south_africa_at_a_provincial_level_files/figure-html/plot_current_reproduction_number-1.png" alt="Current Reproduction Number by Province" width="2100" />
@@ -836,9 +839,9 @@ Current Reproduction Number by Province
 </div>
 </div>
 </div>
-<div id="attack-rate-and-cumulative-deaths-as-at-27-may-2021" class="section level1" number="8">
-<h1 number="8"><span class="header-section-number">8</span> Attack Rate and Cumulative Deaths as at 27 May 2021</h1>
-<p>The estimated attack rate and cumulative deaths (with 95% confidence intervals) are tabulated below (as at 27 May 2021).</p>
+<div id="attack-rate-and-cumulative-deaths-as-at-15-june-2021" class="section level1" number="8">
+<h1 number="8"><span class="header-section-number">8</span> Attack Rate and Cumulative Deaths as at 15 June 2021</h1>
+<p>The estimated attack rate and cumulative deaths (with 95% confidence intervals) are tabulated below (as at 15 June 2021).</p>
 <p>The attack rate is the proportion of the population infected to date. This figure has to be estimated, because many that are infected experience no or mild symptoms, thus they may not seek medical advice and hence will never be tested.</p>
 <p>Cumulative deaths are also inexact due to the fact that it’s based off an uncertain proportion of excess deaths which also needs to be projected to the latest date.</p>
 <p>The confidence intervals for these estimates remain wide.</p>
@@ -854,53 +857,53 @@ Current Reproduction Number by Province
 <tbody>
 <tr class="odd">
 <td align="left">EC</td>
-<td align="left">66.7% [52.8%-78.4%]</td>
-<td align="left">29 555 [ 23 612 - 35 920]</td>
+<td align="left">66.8% [53.5%-78.2%]</td>
+<td align="left">29 453 [ 23 624 - 35 503]</td>
 </tr>
 <tr class="even">
 <td align="left">FS</td>
-<td align="left">68.9% [50.6%-87.0%]</td>
-<td align="left">8 314 [ 6 499 - 10 382]</td>
+<td align="left">74.6% [56.8%-89.4%]</td>
+<td align="left">9 369 [ 7 407 - 11 539]</td>
 </tr>
 <tr class="odd">
 <td align="left">GP</td>
-<td align="left">52.6% [36.7%-71.4%]</td>
-<td align="left">26 227 [ 19 398 - 34 839]</td>
+<td align="left">61.3% [42.7%-80.9%]</td>
+<td align="left">28 259 [ 21 235 - 36 527]</td>
 </tr>
 <tr class="even">
 <td align="left">KZN</td>
-<td align="left">66.9% [52.3%-79.3%]</td>
-<td align="left">31 520 [ 24 760 - 38 705]</td>
+<td align="left">68.0% [54.2%-79.9%]</td>
+<td align="left">31 661 [ 25 012 - 38 830]</td>
 </tr>
 <tr class="odd">
 <td align="left">LP</td>
-<td align="left">53.1% [35.9%-73.2%]</td>
-<td align="left">14 507 [ 10 395 - 19 873]</td>
+<td align="left">56.0% [38.6%-75.2%]</td>
+<td align="left">14 805 [ 10 819 - 20 082]</td>
 </tr>
 <tr class="even">
 <td align="left">MP</td>
-<td align="left">62.0% [44.9%-78.8%]</td>
-<td align="left">10 843 [ 8 182 - 13 896]</td>
+<td align="left">67.3% [50.4%-82.5%]</td>
+<td align="left">11 345 [ 8 778 - 14 227]</td>
 </tr>
 <tr class="odd">
 <td align="left">NC</td>
-<td align="left">76.1% [58.1%-90.7%]</td>
-<td align="left">4 273 [ 3 367 - 5 253]</td>
+<td align="left">81.4% [65.8%-92.0%]</td>
+<td align="left">4 918 [ 3 979 - 5 957]</td>
 </tr>
 <tr class="even">
 <td align="left">NW</td>
-<td align="left">43.7% [28.4%-67.8%]</td>
-<td align="left">6 249 [ 4 585 - 8 529]</td>
+<td align="left">53.7% [35.0%-78.9%]</td>
+<td align="left">7 330 [ 5 482 - 9 770]</td>
 </tr>
 <tr class="odd">
 <td align="left">WC</td>
-<td align="left">55.2% [39.6%-71.9%]</td>
-<td align="left">16 188 [ 12 213 - 20 854]</td>
+<td align="left">55.3% [40.4%-70.8%]</td>
+<td align="left">16 154 [ 12 449 - 20 615]</td>
 </tr>
 <tr class="even">
 <td align="left">South Africa</td>
-<td align="left">58.7% [52.1%-65.8%]</td>
-<td align="left">147 677 [133 176 - 163 284]</td>
+<td align="left">63.0% [55.9%-70.3%]</td>
+<td align="left">153 296 [139 256 - 168 627]</td>
 </tr>
 </tbody>
 </table>
@@ -912,7 +915,7 @@ Current Reproduction Number by Province
 <p>All models are wrong but some are useful - George Box <span class="citation">[14]</span></p>
 </blockquote>
 <p>An incorrect model can be useful because it enables a better understanding of the model and the phenomena being modelled.</p>
-<p>Note detailed projection output can be <a href="projections-mob-base-south_africa_v2-150-daily-20210527.csv">found here</a>.</p>
+<p>Note detailed projection output can be <a href="projections-mob-base-south_africa_v2-150-daily-20210615.csv">found here</a>.</p>
 <p>Projections are done using constant, increasing and decreasing mobility but other interventions are left constant. It should also be noted that the <span class="math inline">\(\epsilon_{w_m(t),m}\)</span> are projected forward at constant levels and are not adjusted for projection purposes.</p>
 <p>The <span class="math inline">\(\epsilon_{w_m(t),m}\)</span> is held at “current” levels when projecting forwards. It should be noted that these levels are set 28 days prior as recent deaths only affect infections that occured prior to that. Based on the observed calibration for Western Cape there is a possibility that this may be resulting in too low recent infections.</p>
 <div id="no-change-in-mobility" class="section level2" number="9.1">
@@ -933,72 +936,72 @@ Current Reproduction Number by Province
 <tbody>
 <tr class="odd">
 <td align="left">EC</td>
-<td align="left">67.6% [53.5%-79.5%]</td>
-<td align="left">29 908 [ 23 944- 36 297]</td>
-<td align="left">290</td>
-<td align="left">2020-12-31</td>
+<td align="left">68.4% [54.8%-79.6%]</td>
+<td align="left">29 844 [ 23 970- 35 826]</td>
+<td align="left">283</td>
+<td align="left">2021-01-01</td>
 </tr>
 <tr class="even">
 <td align="left">FS</td>
-<td align="left">72.5% [52.7%-89.8%]</td>
-<td align="left">9 666 [ 7 338- 12 405]</td>
-<td align="left">75</td>
+<td align="left">76.4% [58.4%-90.3%]</td>
+<td align="left">9 965 [ 7 907- 12 207]</td>
+<td align="left">74</td>
 <td align="left">2020-08-04</td>
 </tr>
 <tr class="odd">
 <td align="left">GP</td>
-<td align="left">59.5% [38.8%-84.2%]</td>
-<td align="left">29 481 [ 21 240- 40 398]</td>
-<td align="left">324</td>
-<td align="left">2020-07-20</td>
+<td align="left">66.8% [45.2%-87.9%]</td>
+<td align="left">31 053 [ 23 213- 40 138]</td>
+<td align="left">321</td>
+<td align="left">2020-07-19</td>
 </tr>
 <tr class="even">
 <td align="left">KZN</td>
-<td align="left">68.2% [53.1%-81.1%]</td>
-<td align="left">32 166 [ 25 320- 39 432]</td>
-<td align="left">488</td>
+<td align="left">70.2% [55.6%-83.0%]</td>
+<td align="left">32 445 [ 25 789- 39 459]</td>
+<td align="left">474</td>
 <td align="left">2021-01-11</td>
 </tr>
 <tr class="odd">
 <td align="left">LP</td>
-<td align="left">56.5% [37.2%-79.1%]</td>
-<td align="left">15 322 [ 10 906- 20 935]</td>
-<td align="left">268</td>
+<td align="left">60.1% [40.6%-81.1%]</td>
+<td align="left">15 410 [ 11 297- 20 601]</td>
+<td align="left">266</td>
 <td align="left">2021-01-19</td>
 </tr>
 <tr class="even">
 <td align="left">MP</td>
-<td align="left">65.8% [46.6%-84.6%]</td>
-<td align="left">11 610 [ 8 754- 14 922]</td>
-<td align="left">159</td>
+<td align="left">71.0% [52.3%-86.8%]</td>
+<td align="left">12 015 [ 9 346- 14 936]</td>
+<td align="left">156</td>
 <td align="left">2021-01-19</td>
 </tr>
 <tr class="odd">
 <td align="left">NC</td>
-<td align="left">79.4% [60.8%-92.2%]</td>
-<td align="left">4 972 [ 3 862- 6 171]</td>
-<td align="left">32</td>
-<td align="left">2021-05-20</td>
+<td align="left">82.4% [67.1%-92.4%]</td>
+<td align="left">5 222 [ 4 265- 6 268]</td>
+<td align="left">40</td>
+<td align="left">2021-05-27</td>
 </tr>
 <tr class="even">
 <td align="left">NW</td>
-<td align="left">53.0% [30.3%-85.0%]</td>
-<td align="left">8 080 [ 5 274- 13 072]</td>
+<td align="left">59.0% [36.6%-85.8%]</td>
+<td align="left">8 410 [ 6 055- 11 692]</td>
 <td align="left">87</td>
 <td align="left">2021-01-21</td>
 </tr>
 <tr class="odd">
 <td align="left">WC</td>
-<td align="left">55.6% [39.8%-72.6%]</td>
-<td align="left">16 286 [ 12 273- 21 008]</td>
-<td align="left">206</td>
+<td align="left">56.0% [40.7%-71.9%]</td>
+<td align="left">16 291 [ 12 562- 20 758]</td>
+<td align="left">202</td>
 <td align="left">2021-01-07</td>
 </tr>
 <tr class="even">
 <td align="left">South Africa</td>
-<td align="left">62.4% [54.6%-70.9%]</td>
-<td align="left">157 490 [141 280-175 086]</td>
-<td align="left">1 688</td>
+<td align="left">66.3% [58.3%-74.0%]</td>
+<td align="left">160 653 [145 893-176 485]</td>
+<td align="left">1 660</td>
 <td align="left">2021-01-14</td>
 </tr>
 </tbody>
@@ -1017,72 +1020,72 @@ Current Reproduction Number by Province
 <tbody>
 <tr class="odd">
 <td align="left">EC</td>
-<td align="left">68.8% [54.1%-82.4%]</td>
-<td align="left">30 640 [ 24 302- 38 221]</td>
-<td align="left">290</td>
-<td align="left">2020-12-31</td>
+<td align="left">75.1% [58.4%-87.9%]</td>
+<td align="left">33 555 [ 25 980- 42 216]</td>
+<td align="left">283</td>
+<td align="left">2021-01-01</td>
 </tr>
 <tr class="even">
 <td align="left">FS</td>
-<td align="left">73.0% [53.1%-89.8%]</td>
-<td align="left">9 975 [ 7 472- 12 821]</td>
-<td align="left">75</td>
+<td align="left">77.8% [59.5%-90.7%]</td>
+<td align="left">10 673 [ 8 379- 13 129]</td>
+<td align="left">74</td>
 <td align="left">2020-08-04</td>
 </tr>
 <tr class="odd">
 <td align="left">GP</td>
-<td align="left">64.0% [40.1%-86.3%]</td>
-<td align="left">34 012 [ 22 320- 48 340]</td>
-<td align="left">324</td>
-<td align="left">2020-07-20</td>
+<td align="left">73.4% [49.2%-90.4%]</td>
+<td align="left">39 319 [ 26 771- 51 929]</td>
+<td align="left">321</td>
+<td align="left">2020-07-19</td>
 </tr>
 <tr class="even">
 <td align="left">KZN</td>
-<td align="left">69.5% [53.7%-83.5%]</td>
-<td align="left">33 135 [ 25 720- 41 440]</td>
-<td align="left">488</td>
+<td align="left">75.4% [58.2%-88.4%]</td>
+<td align="left">36 336 [ 27 822- 45 371]</td>
+<td align="left">474</td>
 <td align="left">2021-01-11</td>
 </tr>
 <tr class="odd">
 <td align="left">LP</td>
-<td align="left">59.7% [38.0%-82.9%]</td>
-<td align="left">16 775 [ 11 271- 24 246]</td>
-<td align="left">268</td>
+<td align="left">70.4% [44.9%-88.7%]</td>
+<td align="left">19 753 [ 12 879- 27 173]</td>
+<td align="left">266</td>
 <td align="left">2021-01-19</td>
 </tr>
 <tr class="even">
 <td align="left">MP</td>
-<td align="left">67.9% [47.7%-86.3%]</td>
-<td align="left">12 403 [ 9 024- 16 660]</td>
-<td align="left">159</td>
+<td align="left">75.9% [55.5%-89.7%]</td>
+<td align="left">13 996 [ 10 332- 17 879]</td>
+<td align="left">156</td>
 <td align="left">2021-01-19</td>
 </tr>
 <tr class="odd">
 <td align="left">NC</td>
-<td align="left">79.8% [61.5%-92.2%]</td>
-<td align="left">5 097 [ 3 961- 6 296]</td>
-<td align="left">32</td>
-<td align="left">2021-05-20</td>
+<td align="left">83.0% [68.0%-92.5%]</td>
+<td align="left">5 444 [ 4 450- 6 503]</td>
+<td align="left">40</td>
+<td align="left">2021-05-27</td>
 </tr>
 <tr class="even">
 <td align="left">NW</td>
-<td align="left">56.8% [31.0%-85.6%]</td>
-<td align="left">9 594 [ 5 512- 15 193]</td>
+<td align="left">64.8% [38.6%-88.3%]</td>
+<td align="left">10 916 [ 6 778- 15 714]</td>
 <td align="left">87</td>
 <td align="left">2021-01-21</td>
 </tr>
 <tr class="odd">
 <td align="left">WC</td>
-<td align="left">56.5% [40.0%-76.1%]</td>
-<td align="left">16 590 [ 12 377- 22 112]</td>
-<td align="left">206</td>
+<td align="left">60.0% [41.9%-82.5%]</td>
+<td align="left">17 631 [ 13 016- 24 690]</td>
+<td align="left">202</td>
 <td align="left">2021-01-07</td>
 </tr>
 <tr class="even">
 <td align="left">South Africa</td>
-<td align="left">64.9% [56.2%-73.4%]</td>
-<td align="left">168 220 [148 221-189 792]</td>
-<td align="left">1 688</td>
+<td align="left">72.1% [63.4%-79.7%]</td>
+<td align="left">187 623 [166 095-209 585]</td>
+<td align="left">1 660</td>
 <td align="left">2021-01-14</td>
 </tr>
 </tbody>
@@ -1090,7 +1093,7 @@ Current Reproduction Number by Province
 </div>
 <div id="increase-in-mobility" class="section level2" number="9.2">
 <h2 number="9.2"><span class="header-section-number">9.2</span> Increase in mobility</h2>
-<p>This scenario assumes future mobility half-way between current mobility levels and normal levels. Other interventions are left intact. The attack rate and deaths after increasing mobility are tabulated below (as at 30 June 2021 and 30 September 2021).</p>
+<p>This scenario assumes future mobility increases by a fixed value of 0.1. Other interventions are left intact. The attack rate and deaths after increasing mobility are tabulated below (as at 30 June 2021 and 30 September 2021).</p>
 <table>
 <caption>Projection to 30 June 2021 with increase in mobility</caption>
 <thead>
@@ -1105,72 +1108,72 @@ Current Reproduction Number by Province
 <tbody>
 <tr class="odd">
 <td align="left">EC</td>
-<td align="left">67.6% [53.6%-79.6%]</td>
-<td align="left">29 914 [ 23 949- 36 301]</td>
-<td align="left">290</td>
-<td align="left">2020-12-31</td>
+<td align="left">68.7% [55.0%-79.8%]</td>
+<td align="left">29 846 [ 23 969- 35 827]</td>
+<td align="left">283</td>
+<td align="left">2021-01-01</td>
 </tr>
 <tr class="even">
 <td align="left">FS</td>
-<td align="left">73.0% [53.0%-90.0%]</td>
-<td align="left">9 693 [ 7 353- 12 439]</td>
-<td align="left">75</td>
+<td align="left">76.7% [58.7%-90.5%]</td>
+<td align="left">9 966 [ 7 910- 12 207]</td>
+<td align="left">74</td>
 <td align="left">2020-08-04</td>
 </tr>
 <tr class="odd">
 <td align="left">GP</td>
-<td align="left">60.1% [39.0%-85.0%]</td>
-<td align="left">29 576 [ 21 284- 40 569]</td>
-<td align="left">324</td>
-<td align="left">2020-07-20</td>
+<td align="left">67.7% [45.7%-88.6%]</td>
+<td align="left">31 069 [ 23 221- 40 155]</td>
+<td align="left">321</td>
+<td align="left">2020-07-19</td>
 </tr>
 <tr class="even">
 <td align="left">KZN</td>
-<td align="left">68.3% [53.2%-81.3%]</td>
-<td align="left">32 186 [ 25 331- 39 441]</td>
-<td align="left">488</td>
+<td align="left">70.6% [55.9%-83.3%]</td>
+<td align="left">32 449 [ 25 795- 39 460]</td>
+<td align="left">474</td>
 <td align="left">2021-01-11</td>
 </tr>
 <tr class="odd">
 <td align="left">LP</td>
-<td align="left">56.1% [37.1%-78.5%]</td>
-<td align="left">15 293 [ 10 888- 20 876]</td>
-<td align="left">268</td>
+<td align="left">60.8% [40.9%-81.8%]</td>
+<td align="left">15 416 [ 11 303- 20 616]</td>
+<td align="left">266</td>
 <td align="left">2021-01-19</td>
 </tr>
 <tr class="even">
 <td align="left">MP</td>
-<td align="left">65.5% [46.5%-84.2%]</td>
-<td align="left">11 594 [ 8 736- 14 888]</td>
-<td align="left">159</td>
+<td align="left">71.5% [52.7%-87.2%]</td>
+<td align="left">12 018 [ 9 351- 14 942]</td>
+<td align="left">156</td>
 <td align="left">2021-01-19</td>
 </tr>
 <tr class="odd">
 <td align="left">NC</td>
-<td align="left">79.3% [60.8%-92.2%]</td>
-<td align="left">4 970 [ 3 860- 6 170]</td>
-<td align="left">32</td>
-<td align="left">2021-05-20</td>
+<td align="left">82.5% [67.3%-92.4%]</td>
+<td align="left">5 222 [ 4 267- 6 269]</td>
+<td align="left">40</td>
+<td align="left">2021-05-27</td>
 </tr>
 <tr class="even">
 <td align="left">NW</td>
-<td align="left">51.8% [30.1%-83.8%]</td>
-<td align="left">8 007 [ 5 250- 12 936]</td>
+<td align="left">60.1% [37.0%-87.1%]</td>
+<td align="left">8 416 [ 6 059- 11 699]</td>
 <td align="left">87</td>
 <td align="left">2021-01-21</td>
 </tr>
 <tr class="odd">
 <td align="left">WC</td>
-<td align="left">55.7% [39.9%-72.8%]</td>
-<td align="left">16 294 [ 12 279- 21 013]</td>
-<td align="left">206</td>
+<td align="left">56.1% [40.8%-72.0%]</td>
+<td align="left">16 292 [ 12 564- 20 758]</td>
+<td align="left">202</td>
 <td align="left">2021-01-07</td>
 </tr>
 <tr class="even">
 <td align="left">South Africa</td>
-<td align="left">62.5% [54.6%-71.0%]</td>
-<td align="left">157 526 [141 326-175 189]</td>
-<td align="left">1 688</td>
+<td align="left">66.9% [58.8%-74.6%]</td>
+<td align="left">160 695 [145 918-176 510]</td>
+<td align="left">1 660</td>
 <td align="left">2021-01-14</td>
 </tr>
 </tbody>
@@ -1190,81 +1193,81 @@ Current Reproduction Number by Province
 <tbody>
 <tr class="odd">
 <td align="left">EC</td>
-<td align="left">69.0% [54.2%-82.8%]</td>
-<td align="left">30 725 [ 24 331- 38 426]</td>
-<td align="left">290</td>
-<td align="left">2020-12-31</td>
+<td align="left">77.6% [60.2%-89.6%]</td>
+<td align="left">34 591 [ 26 486- 43 483]</td>
+<td align="left">283</td>
+<td align="left">2021-01-01</td>
 </tr>
 <tr class="even">
 <td align="left">FS</td>
-<td align="left">73.7% [53.6%-90.1%]</td>
-<td align="left">10 066 [ 7 518- 12 921]</td>
-<td align="left">75</td>
+<td align="left">78.8% [60.6%-91.0%]</td>
+<td align="left">10 814 [ 8 466- 13 295]</td>
+<td align="left">74</td>
 <td align="left">2020-08-04</td>
 </tr>
 <tr class="odd">
 <td align="left">GP</td>
-<td align="left">65.2% [40.6%-87.0%]</td>
-<td align="left">34 651 [ 22 521- 49 004]</td>
-<td align="left">324</td>
-<td align="left">2020-07-20</td>
+<td align="left">76.5% [52.1%-91.3%]</td>
+<td align="left">40 997 [ 27 948- 53 321]</td>
+<td align="left">321</td>
+<td align="left">2020-07-19</td>
 </tr>
 <tr class="even">
 <td align="left">KZN</td>
-<td align="left">70.0% [53.9%-84.2%]</td>
-<td align="left">33 361 [ 25 823- 41 887]</td>
-<td align="left">488</td>
+<td align="left">77.7% [59.8%-89.8%]</td>
+<td align="left">37 412 [ 28 439- 46 638]</td>
+<td align="left">474</td>
 <td align="left">2021-01-11</td>
 </tr>
 <tr class="odd">
 <td align="left">LP</td>
-<td align="left">58.7% [37.7%-81.8%]</td>
-<td align="left">16 504 [ 11 208- 23 769]</td>
-<td align="left">268</td>
+<td align="left">74.4% [47.2%-90.7%]</td>
+<td align="left">20 872 [ 13 336- 28 170]</td>
+<td align="left">266</td>
 <td align="left">2021-01-19</td>
 </tr>
 <tr class="even">
 <td align="left">MP</td>
-<td align="left">67.3% [47.4%-85.9%]</td>
-<td align="left">12 302 [ 8 981- 16 487]</td>
-<td align="left">159</td>
+<td align="left">78.1% [57.0%-90.6%]</td>
+<td align="left">14 397 [ 10 578- 18 257]</td>
+<td align="left">156</td>
 <td align="left">2021-01-19</td>
 </tr>
 <tr class="odd">
 <td align="left">NC</td>
-<td align="left">79.7% [61.4%-92.2%]</td>
-<td align="left">5 093 [ 3 955- 6 291]</td>
-<td align="left">32</td>
-<td align="left">2021-05-20</td>
+<td align="left">83.3% [68.7%-92.6%]</td>
+<td align="left">5 466 [ 4 466- 6 519]</td>
+<td align="left">40</td>
+<td align="left">2021-05-27</td>
 </tr>
 <tr class="even">
 <td align="left">NW</td>
-<td align="left">54.7% [30.6%-84.5%]</td>
-<td align="left">9 243 [ 5 447- 14 819]</td>
+<td align="left">68.6% [40.1%-89.8%]</td>
+<td align="left">11 555 [ 6 962- 16 293]</td>
 <td align="left">87</td>
 <td align="left">2021-01-21</td>
 </tr>
 <tr class="odd">
 <td align="left">WC</td>
-<td align="left">57.1% [40.2%-78.2%]</td>
-<td align="left">16 753 [ 12 456- 22 804]</td>
-<td align="left">206</td>
+<td align="left">62.5% [42.5%-85.3%]</td>
+<td align="left">18 265 [ 13 117- 26 198]</td>
+<td align="left">202</td>
 <td align="left">2021-01-07</td>
 </tr>
 <tr class="even">
 <td align="left">South Africa</td>
-<td align="left">65.1% [56.3%-73.6%]</td>
-<td align="left">168 697 [148 450-190 435]</td>
-<td align="left">1 688</td>
+<td align="left">74.9% [66.0%-82.2%]</td>
+<td align="left">194 368 [171 727-217 026]</td>
+<td align="left">1 660</td>
 <td align="left">2021-01-14</td>
 </tr>
 </tbody>
 </table>
-<p>Based on the above an increase mobility could mean roughly 0 more deaths by the end of September 2021.</p>
+<p>Based on the above an increase mobility could mean roughly 7 000 more deaths by the end of September 2021.</p>
 </div>
 <div id="decreased-mobility" class="section level2" number="9.3">
 <h2 number="9.3"><span class="header-section-number">9.3</span> Decreased mobility</h2>
-<p>This scenario assumes future mobility is decreased by 50% more than currently. The attack rate and deaths after decreased mobility are tabulated below (as at 30 June 2021 and 30 September 2021).</p>
+<p>This scenario assumes future mobility decreases by a fixed value of 0.1. The attack rate and deaths after decreased mobility are tabulated below (as at 30 June 2021 and 30 September 2021).</p>
 <table>
 <caption>Projection to 30 June 2021 with decrease in mobility</caption>
 <thead>
@@ -1279,72 +1282,72 @@ Current Reproduction Number by Province
 <tbody>
 <tr class="odd">
 <td align="left">EC</td>
-<td align="left">67.5% [53.5%-79.4%]</td>
-<td align="left">29 903 [ 23 944- 36 284]</td>
-<td align="left">290</td>
-<td align="left">2020-12-31</td>
+<td align="left">68.2% [54.6%-79.4%]</td>
+<td align="left">29 841 [ 23 966- 35 825]</td>
+<td align="left">283</td>
+<td align="left">2021-01-01</td>
 </tr>
 <tr class="even">
 <td align="left">FS</td>
-<td align="left">72.1% [52.4%-89.6%]</td>
-<td align="left">9 642 [ 7 325- 12 371]</td>
-<td align="left">75</td>
+<td align="left">76.1% [58.2%-90.2%]</td>
+<td align="left">9 963 [ 7 905- 12 207]</td>
+<td align="left">74</td>
 <td align="left">2020-08-04</td>
 </tr>
 <tr class="odd">
 <td align="left">GP</td>
-<td align="left">59.0% [38.6%-83.6%]</td>
-<td align="left">29 391 [ 21 206- 40 223]</td>
-<td align="left">324</td>
-<td align="left">2020-07-20</td>
+<td align="left">66.0% [44.8%-87.0%]</td>
+<td align="left">31 037 [ 23 196- 40 107]</td>
+<td align="left">321</td>
+<td align="left">2020-07-19</td>
 </tr>
 <tr class="even">
 <td align="left">KZN</td>
-<td align="left">68.0% [53.0%-80.9%]</td>
-<td align="left">32 148 [ 25 306- 39 416]</td>
-<td align="left">488</td>
+<td align="left">69.9% [55.4%-82.6%]</td>
+<td align="left">32 440 [ 25 787- 39 459]</td>
+<td align="left">474</td>
 <td align="left">2021-01-11</td>
 </tr>
 <tr class="odd">
 <td align="left">LP</td>
-<td align="left">56.9% [37.4%-79.9%]</td>
-<td align="left">15 353 [ 10 917- 20 982]</td>
-<td align="left">268</td>
+<td align="left">59.5% [40.2%-80.3%]</td>
+<td align="left">15 405 [ 11 294- 20 599]</td>
+<td align="left">266</td>
 <td align="left">2021-01-19</td>
 </tr>
 <tr class="even">
 <td align="left">MP</td>
-<td align="left">66.0% [46.7%-85.1%]</td>
-<td align="left">11 626 [ 8 759- 14 955]</td>
-<td align="left">159</td>
+<td align="left">70.5% [52.0%-86.4%]</td>
+<td align="left">12 012 [ 9 343- 14 935]</td>
+<td align="left">156</td>
 <td align="left">2021-01-19</td>
 </tr>
 <tr class="odd">
 <td align="left">NC</td>
-<td align="left">79.4% [60.9%-92.2%]</td>
-<td align="left">4 973 [ 3 864- 6 171]</td>
-<td align="left">32</td>
-<td align="left">2021-05-20</td>
+<td align="left">82.3% [66.8%-92.4%]</td>
+<td align="left">5 222 [ 4 264- 6 268]</td>
+<td align="left">40</td>
+<td align="left">2021-05-27</td>
 </tr>
 <tr class="even">
 <td align="left">NW</td>
-<td align="left">54.3% [30.5%-86.1%]</td>
-<td align="left">8 159 [ 5 289- 13 239]</td>
+<td align="left">58.1% [36.3%-85.0%]</td>
+<td align="left">8 404 [ 6 053- 11 687]</td>
 <td align="left">87</td>
 <td align="left">2021-01-21</td>
 </tr>
 <tr class="odd">
 <td align="left">WC</td>
-<td align="left">55.5% [39.8%-72.4%]</td>
-<td align="left">16 280 [ 12 271- 20 994]</td>
-<td align="left">206</td>
+<td align="left">55.9% [40.7%-71.7%]</td>
+<td align="left">16 290 [ 12 561- 20 758]</td>
+<td align="left">202</td>
 <td align="left">2021-01-07</td>
 </tr>
 <tr class="even">
 <td align="left">South Africa</td>
-<td align="left">62.4% [54.6%-70.8%]</td>
-<td align="left">157 477 [141 307-174 982]</td>
-<td align="left">1 688</td>
+<td align="left">65.8% [58.0%-73.5%]</td>
+<td align="left">160 613 [145 840-176 440]</td>
+<td align="left">1 660</td>
 <td align="left">2021-01-14</td>
 </tr>
 </tbody>
@@ -1364,81 +1367,81 @@ Current Reproduction Number by Province
 <tbody>
 <tr class="odd">
 <td align="left">EC</td>
-<td align="left">68.6% [54.0%-82.0%]</td>
-<td align="left">30 563 [ 24 233- 37 994]</td>
-<td align="left">290</td>
-<td align="left">2020-12-31</td>
+<td align="left">73.0% [57.1%-86.6%]</td>
+<td align="left">32 682 [ 25 478- 40 942]</td>
+<td align="left">283</td>
+<td align="left">2021-01-01</td>
 </tr>
 <tr class="even">
 <td align="left">FS</td>
-<td align="left">72.5% [52.8%-89.6%]</td>
-<td align="left">9 902 [ 7 439- 12 734]</td>
-<td align="left">75</td>
+<td align="left">77.0% [59.0%-90.5%]</td>
+<td align="left">10 570 [ 8 304- 13 021]</td>
+<td align="left">74</td>
 <td align="left">2020-08-04</td>
 </tr>
 <tr class="odd">
 <td align="left">GP</td>
-<td align="left">62.8% [39.6%-85.6%]</td>
-<td align="left">33 422 [ 22 170- 47 696]</td>
-<td align="left">324</td>
-<td align="left">2020-07-20</td>
+<td align="left">70.7% [47.2%-89.4%]</td>
+<td align="left">37 903 [ 26 043- 50 717]</td>
+<td align="left">321</td>
+<td align="left">2020-07-19</td>
 </tr>
 <tr class="even">
 <td align="left">KZN</td>
-<td align="left">69.1% [53.6%-82.9%]</td>
-<td align="left">32 944 [ 25 670- 41 072]</td>
-<td align="left">488</td>
+<td align="left">73.5% [57.1%-87.3%]</td>
+<td align="left">35 466 [ 27 365- 44 221]</td>
+<td align="left">474</td>
 <td align="left">2021-01-11</td>
 </tr>
 <tr class="odd">
 <td align="left">LP</td>
-<td align="left">60.9% [38.4%-84.0%]</td>
-<td align="left">17 088 [ 11 354- 24 736]</td>
-<td align="left">268</td>
+<td align="left">66.8% [42.9%-87.0%]</td>
+<td align="left">18 778 [ 12 532- 26 307]</td>
+<td align="left">266</td>
 <td align="left">2021-01-19</td>
 </tr>
 <tr class="even">
 <td align="left">MP</td>
-<td align="left">68.5% [48.0%-86.7%]</td>
-<td align="left">12 514 [ 9 069- 16 808]</td>
-<td align="left">159</td>
+<td align="left">74.0% [54.0%-89.0%]</td>
+<td align="left">13 660 [ 10 127- 17 526]</td>
+<td align="left">156</td>
 <td align="left">2021-01-19</td>
 </tr>
 <tr class="odd">
 <td align="left">NC</td>
-<td align="left">79.8% [61.6%-92.2%]</td>
-<td align="left">5 102 [ 3 967- 6 301]</td>
-<td align="left">32</td>
-<td align="left">2021-05-20</td>
+<td align="left">82.7% [67.6%-92.5%]</td>
+<td align="left">5 426 [ 4 430- 6 493]</td>
+<td align="left">40</td>
+<td align="left">2021-05-27</td>
 </tr>
 <tr class="even">
 <td align="left">NW</td>
-<td align="left">59.2% [31.4%-86.8%]</td>
-<td align="left">9 996 [ 5 574- 15 551]</td>
+<td align="left">61.9% [37.4%-87.1%]</td>
+<td align="left">10 436 [ 6 652- 15 286]</td>
 <td align="left">87</td>
 <td align="left">2021-01-21</td>
 </tr>
 <tr class="odd">
 <td align="left">WC</td>
-<td align="left">56.1% [39.9%-74.4%]</td>
-<td align="left">16 481 [ 12 350- 21 653]</td>
-<td align="left">206</td>
+<td align="left">58.4% [41.3%-79.6%]</td>
+<td align="left">17 219 [ 12 918- 23 507]</td>
+<td align="left">202</td>
 <td align="left">2021-01-07</td>
 </tr>
 <tr class="even">
 <td align="left">South Africa</td>
-<td align="left">64.7% [56.2%-73.2%]</td>
-<td align="left">168 011 [148 185-189 396]</td>
-<td align="left">1 688</td>
+<td align="left">69.9% [61.2%-77.6%]</td>
+<td align="left">182 141 [161 469-203 746]</td>
+<td align="left">1 660</td>
 <td align="left">2021-01-14</td>
 </tr>
 </tbody>
 </table>
-<p>Based on the above a decrease in mobility could mean roughly 0 fewer deaths by the end of September 2021.</p>
+<p>Based on the above a decrease in mobility could mean roughly 5 000 fewer deaths by the end of September 2021.</p>
 </div>
 <div id="worst-case-scenario" class="section level2" number="9.4">
 <h2 number="9.4"><span class="header-section-number">9.4</span> Worst Case Scenario</h2>
-<p>This scenario assumes future mobility returns to normal, mask wearing is eliminated as well as that the AR(2) term reverts to 0. The attack rate and deaths are tabulated below (as at 30 June 2021 and 30 September 2021). This would be a relatively extreme worst case scenario as this essentially assumes not mitigation measures in place and would probably be close to the absolute worst case.</p>
+<p>This scenario assumes future mobility increases by a fixed value of 0.1, mask wearing is eliminated as well as that the AR(2) term reverts to 0. The attack rate and deaths are tabulated below (as at 30 June 2021 and 30 September 2021). This would be a relatively extreme worst case scenario as this essentially assumes not mitigation measures in place and would probably be close to the absolute worst case.</p>
 <table>
 <caption>Projection to 30 June 2021 - Worst Case</caption>
 <thead>
@@ -1453,77 +1456,77 @@ Current Reproduction Number by Province
 <tbody>
 <tr class="odd">
 <td align="left">EC</td>
-<td align="left">67.7% [55.0%-78.7%]</td>
-<td align="left">29 915 [ 24 053- 36 229]</td>
-<td align="left">290</td>
-<td align="left">2020-12-31</td>
+<td align="left">68.3% [55.5%-78.9%]</td>
+<td align="left">29 839 [ 23 969- 35 819]</td>
+<td align="left">283</td>
+<td align="left">2021-01-01</td>
 </tr>
 <tr class="even">
 <td align="left">FS</td>
-<td align="left">77.0% [62.8%-89.0%]</td>
-<td align="left">9 858 [ 7 652- 12 436]</td>
-<td align="left">75</td>
+<td align="left">77.3% [60.7%-90.1%]</td>
+<td align="left">9 967 [ 7 914- 12 205]</td>
+<td align="left">74</td>
 <td align="left">2020-08-04</td>
 </tr>
 <tr class="odd">
 <td align="left">GP</td>
-<td align="left">70.1% [51.6%-86.4%]</td>
-<td align="left">30 712 [ 22 724- 40 676]</td>
-<td align="left">324</td>
-<td align="left">2020-07-20</td>
+<td align="left">69.7% [50.4%-86.9%]</td>
+<td align="left">31 083 [ 23 301- 40 055]</td>
+<td align="left">321</td>
+<td align="left">2020-07-19</td>
 </tr>
 <tr class="even">
 <td align="left">KZN</td>
-<td align="left">68.6% [55.4%-79.9%]</td>
-<td align="left">32 189 [ 25 493- 39 290]</td>
-<td align="left">488</td>
+<td align="left">70.1% [56.8%-81.3%]</td>
+<td align="left">32 436 [ 25 798- 39 448]</td>
+<td align="left">474</td>
 <td align="left">2021-01-11</td>
 </tr>
 <tr class="odd">
 <td align="left">LP</td>
-<td align="left">63.0% [45.3%-80.9%]</td>
-<td align="left">15 660 [ 11 416- 20 882]</td>
-<td align="left">268</td>
+<td align="left">63.4% [44.9%-81.4%]</td>
+<td align="left">15 428 [ 11 333- 20 600]</td>
+<td align="left">266</td>
 <td align="left">2021-01-19</td>
 </tr>
 <tr class="even">
 <td align="left">MP</td>
-<td align="left">69.0% [53.2%-82.9%]</td>
-<td align="left">11 730 [ 9 031- 14 822]</td>
-<td align="left">159</td>
+<td align="left">72.6% [55.8%-86.2%]</td>
+<td align="left">12 021 [ 9 373- 14 925]</td>
+<td align="left">156</td>
 <td align="left">2021-01-19</td>
 </tr>
 <tr class="odd">
 <td align="left">NC</td>
-<td align="left">80.7% [67.1%-91.5%]</td>
-<td align="left">4 995 [ 3 965- 6 141]</td>
-<td align="left">32</td>
-<td align="left">2021-05-20</td>
+<td align="left">82.7% [68.8%-92.3%]</td>
+<td align="left">5 222 [ 4 269- 6 268]</td>
+<td align="left">40</td>
+<td align="left">2021-05-27</td>
 </tr>
 <tr class="even">
 <td align="left">NW</td>
-<td align="left">77.0% [50.2%-90.8%]</td>
-<td align="left">9 233 [ 6 018- 13 726]</td>
-<td align="left">174</td>
-<td align="left">2021-07-09</td>
+<td align="left">68.5% [44.0%-89.0%]</td>
+<td align="left">8 455 [ 6 096- 11 707]</td>
+<td align="left">176</td>
+<td align="left">2021-07-22</td>
 </tr>
 <tr class="odd">
 <td align="left">WC</td>
-<td align="left">56.5% [41.6%-72.4%]</td>
-<td align="left">16 323 [ 12 369- 20 960]</td>
-<td align="left">206</td>
+<td align="left">56.2% [41.3%-71.5%]</td>
+<td align="left">16 291 [ 12 571- 20 759]</td>
+<td align="left">202</td>
 <td align="left">2021-01-07</td>
 </tr>
 <tr class="even">
 <td align="left">South Africa</td>
-<td align="left">68.2% [61.5%-74.4%]</td>
-<td align="left">160 615 [145 166-177 264]</td>
-<td align="left">1 688</td>
+<td align="left">68.2% [61.2%-74.9%]</td>
+<td align="left">160 742 [145 994-176 491]</td>
+<td align="left">1 660</td>
 <td align="left">2021-01-14</td>
 </tr>
 </tbody>
 </table>
-<p>Based on the above the worst case scenario could result in roughly 3 000 more deaths by the end of June 2021.</p>
+<p>Based on the above the worst case scenario could result in roughly 0 more deaths by the end of June 2021.</p>
 <table>
 <caption>Projection to 30 September 2021 - Worst Case</caption>
 <thead>
@@ -1538,77 +1541,77 @@ Current Reproduction Number by Province
 <tbody>
 <tr class="odd">
 <td align="left">EC</td>
-<td align="left">72.5% [63.1%-82.3%]</td>
-<td align="left">32 003 [ 26 217- 39 336]</td>
-<td align="left">290</td>
-<td align="left">2020-12-31</td>
+<td align="left">77.9% [68.8%-87.0%]</td>
+<td align="left">34 645 [ 28 357- 42 985]</td>
+<td align="left">283</td>
+<td align="left">2021-01-01</td>
 </tr>
 <tr class="even">
 <td align="left">FS</td>
-<td align="left">81.3% [73.2%-89.3%]</td>
-<td align="left">11 130 [ 8 903- 13 706]</td>
-<td align="left">75</td>
+<td align="left">83.2% [75.4%-90.6%]</td>
+<td align="left">11 420 [ 9 303- 13 912]</td>
+<td align="left">74</td>
 <td align="left">2020-08-04</td>
 </tr>
 <tr class="odd">
 <td align="left">GP</td>
-<td align="left">83.9% [73.5%-91.3%]</td>
-<td align="left">44 958 [ 33 579- 56 495]</td>
-<td align="left">324</td>
-<td align="left">2020-07-20</td>
+<td align="left">85.6% [77.5%-92.2%]</td>
+<td align="left">46 081 [ 35 518- 57 252]</td>
+<td align="left">321</td>
+<td align="left">2020-07-19</td>
 </tr>
 <tr class="even">
 <td align="left">KZN</td>
-<td align="left">73.9% [64.6%-83.2%]</td>
-<td align="left">34 987 [ 28 510- 43 292]</td>
-<td align="left">488</td>
+<td align="left">78.3% [69.8%-86.6%]</td>
+<td align="left">37 628 [ 30 644- 45 885]</td>
+<td align="left">474</td>
 <td align="left">2021-01-11</td>
 </tr>
 <tr class="odd">
 <td align="left">LP</td>
-<td align="left">80.7% [67.0%-90.1%]</td>
-<td align="left">22 751 [ 16 309- 29 643]</td>
-<td align="left">268</td>
+<td align="left">88.3% [77.4%-95.1%]</td>
+<td align="left">25 029 [ 18 758- 31 487]</td>
+<td align="left">266</td>
 <td align="left">2021-01-19</td>
 </tr>
 <tr class="even">
 <td align="left">MP</td>
-<td align="left">78.5% [68.0%-87.6%]</td>
-<td align="left">14 328 [ 11 040- 18 393]</td>
-<td align="left">159</td>
+<td align="left">85.1% [76.3%-92.2%]</td>
+<td align="left">15 720 [ 12 454- 19 474]</td>
+<td align="left">156</td>
 <td align="left">2021-01-19</td>
 </tr>
 <tr class="odd">
 <td align="left">NC</td>
-<td align="left">82.3% [73.5%-91.5%]</td>
-<td align="left">5 266 [ 4 301- 6 346]</td>
-<td align="left">32</td>
-<td align="left">2021-05-20</td>
+<td align="left">84.5% [75.9%-92.3%]</td>
+<td align="left">5 545 [ 4 635- 6 560]</td>
+<td align="left">40</td>
+<td align="left">2021-05-27</td>
 </tr>
 <tr class="even">
 <td align="left">NW</td>
-<td align="left">87.8% [79.0%-93.2%]</td>
-<td align="left">14 996 [ 11 229- 18 665]</td>
-<td align="left">174</td>
-<td align="left">2021-07-09</td>
+<td align="left">91.1% [83.0%-96.0%]</td>
+<td align="left">15 484 [ 11 620- 19 203]</td>
+<td align="left">176</td>
+<td align="left">2021-07-22</td>
 </tr>
 <tr class="odd">
 <td align="left">WC</td>
-<td align="left">73.8% [55.9%-88.3%]</td>
-<td align="left">20 868 [ 15 160- 29 225]</td>
-<td align="left">206</td>
+<td align="left">75.3% [59.6%-88.0%]</td>
+<td align="left">21 460 [ 15 787- 28 967]</td>
+<td align="left">202</td>
 <td align="left">2021-01-07</td>
 </tr>
 <tr class="even">
 <td align="left">South Africa</td>
-<td align="left">78.9% [74.2%-82.8%]</td>
-<td align="left">201 287 [182 108-221 267]</td>
-<td align="left">1 688</td>
+<td align="left">82.6% [78.5%-86.3%]</td>
+<td align="left">213 011 [194 291-233 215]</td>
+<td align="left">1 660</td>
 <td align="left">2021-01-14</td>
 </tr>
 </tbody>
 </table>
-<p>Based on the above the worst case scenario could result in roughly 33 000 more deaths by the end of September 2021.</p>
+<p>Based on the above the worst case scenario could result in roughly 25 000 more deaths by the end of September 2021.</p>
 </div>
 <div id="south-africa" class="section level2" number="9.5">
 <h2 number="9.5"><span class="header-section-number">9.5</span> South Africa</h2>
@@ -2086,8 +2089,8 @@ Email: <a href="mailto:LRossouw@genre.com">LRossouw@GenRe.com</a> Mobile: +27 71
 <div id="ref-Unwin2020" class="csl-entry">
 <div class="csl-left-margin">[3] </div><div class="csl-right-inline">H. Unwin <em>et al.</em>, <span>“Report 23: <span>State</span>-level tracking of <span>COVID</span>-19 in the <span>United States</span>,”</span> <span>Imperial College London</span>, 2020 [Online]. Available: <a href="https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-23-united-states/">https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-23-united-states/</a></div>
 </div>
-<div id="ref-Bradshaw2021s" class="csl-entry">
-<div class="csl-left-margin">[4] </div><div class="csl-right-inline">D. Bradshaw, R. Laubscher, R. Dorrington, P. Groenewald, and T. Moultrie, <span>“Report on weekly deaths in <span>South Africa</span> 16 - 22 <span>May</span> 2021 (<span>Week</span> 20),”</span> <span>Burden of Disease Research Unit, South African Medical Research Council</span>, May 2021 [Online]. Available: <a href="https://www.samrc.ac.za/sites/default/files/files/2021-05-19/weekly15May2021.pdf">https://www.samrc.ac.za/sites/default/files/files/2021-05-19/weekly15May2021.pdf</a>. [Accessed: 27-May-2021]</div>
+<div id="ref-Bradshaw2021v" class="csl-entry">
+<div class="csl-left-margin">[4] </div><div class="csl-right-inline">D. Bradshaw, R. Laubscher, R. Dorrington, P. Groenewald, and T. Moultrie, <span>“Report on weekly deaths in <span>South Africa</span> 6 - 12 <span>June</span> 2021 (<span>Week</span> 23),”</span> <span>Burden of Disease Research Unit, South African Medical Research Council</span>, Jun. 2021 [Online]. Available: <a href="https://www.samrc.ac.za/sites/default/files/files/2021-06-15/weekly12June2021.pdf">https://www.samrc.ac.za/sites/default/files/files/2021-06-15/weekly12June2021.pdf</a>. [Accessed: 15-Jun-2021]</div>
 </div>
 <div id="ref-Google2020" class="csl-entry">
 <div class="csl-left-margin">[5] </div><div class="csl-right-inline">Google LLC, <span>“Google <span>COVID</span>-19 community mobility reports.”</span> 2020 [Online]. Available: <a href="https://www.google.com/covid19/mobility/">https://www.google.com/covid19/mobility/</a></div>
